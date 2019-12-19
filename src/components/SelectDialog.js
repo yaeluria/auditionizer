@@ -27,6 +27,10 @@ const SelectDialog = observer(() => {
     setOpen(false);
   };
 
+  const pickNext = () => {
+    pieceStore.select();
+  }
+
   const handlePick = c => {
     if(pieceStore.pieces.length > 0){
       console.log(pieceStore.pieces);
@@ -63,7 +67,7 @@ const SelectDialog = observer(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={pickNext} color="primary">
             Next
           </Button>
         </DialogActions>
