@@ -28,14 +28,19 @@ const SelectDialog = observer(() => {
   };
 
   const handlePick = c => {
-    setOpen(true);
-    pieceStore.select(c);
+    if(pieceStore.pieces.length > 0){
+      console.log(pieceStore.pieces);
+      setOpen(true);
+      pieceStore.select(c);
+    }
+  
     }
 
 
   return (
     <div>
     <Button
+    disabled= {pieceStore.pieces.length <= 0}
     onClick = {handlePick}
     fullWidth
     variant="contained"
@@ -55,7 +60,6 @@ const SelectDialog = observer(() => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
            {pieceStore.selectedOption ? pieceStore.selectedOption.text : "no more pieces to select"}
-
           </DialogContentText>
         </DialogContent>
         <DialogActions>
