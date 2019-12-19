@@ -31,11 +31,10 @@ const SelectDialog = observer(() => {
     pieceStore.select();
   }
 
-  const handlePick = c => {
+  const handlePick = () => {
     if(pieceStore.pieces.length > 0){
-      console.log(pieceStore.pieces);
       setOpen(true);
-      pieceStore.select(c);
+      pieceStore.select();
     }
   
     }
