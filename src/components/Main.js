@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
 import SignInDialog from './SignInDialog';
+import LoginTooltip from './LoginTooltip';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,11 +16,13 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {usePieceStore} from '../usePieceStore';
 
+import { usePieceStore } from '../usePieceStore';
+import { useAuthStore } from '../useAuthStore';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -67,6 +70,7 @@ const useStyles = makeStyles(theme => ({
 
 const Main = observer(() => {
 const pieceStore = usePieceStore();
+const authStore = useAuthStore();
 
 
   const classes = useStyles();
@@ -79,7 +83,8 @@ const pieceStore = usePieceStore();
     pieceStore.add(textInput.current.value);
     textInput.current.value = '';
   };
-
+ const saveList = "Save list";
+ const chooseList = "Choose from my lists"
 
 
   return (
@@ -99,10 +104,7 @@ const pieceStore = usePieceStore();
         <div className={classes.paper}>
      
        
-          <Typography component="h1" variant="h5">
-        Piece List
-          </Typography>
-  
+          <Typography component="h1" variant="h5"> Piece List </Typography>
 
        
           <form onSubmit={addPiece} className={classes.form} noValidate>
@@ -133,16 +135,28 @@ const pieceStore = usePieceStore();
             />
        
             <SelectDialog />
-            <Grid container>
+              <Grid container>
               <Grid item xs>
+              {
+                authStore.loggedIn ?
                 <Button href="#" >
-                  Save List
+                  {saveList}
                 </Button>
+                 :
+                <LoginTooltip buttonText={saveList} />
+              }
+               
               </Grid>
               <Grid item>
+              {
+                authStore.loggedIn ?
                 <Button href="#" >
-                 choose from my lists
+                  {chooseList}
                 </Button>
+                 :
+                <LoginTooltip buttonText={chooseList} />
+              }
+
               </Grid>
             </Grid>
           </form>

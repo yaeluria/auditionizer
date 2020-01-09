@@ -11,7 +11,7 @@ import { useAuthStore } from '../useAuthStore';
 
 const SignInDialog = observer(() => { 
 
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
   const authStore = useAuthStore();
   const uiConfig = {
     signInFlow: 'popup',
@@ -25,10 +25,12 @@ const SignInDialog = observer(() => {
   };
   
   const openLogin = () => {
-      setOpen(true);
+      // setOpen(true);
+      authStore.openLogin = true;
   }
-  const handleClose = () => {
-    setOpen(false);
+  const closeLogin = () => {
+    // setOpen(false);
+    authStore.openLogin = false;
   };
 
   const signOut = () => {
@@ -62,8 +64,8 @@ const SignInDialog = observer(() => {
       </Button>
      }  
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={authStore.openLogin}
+        onClose={closeLogin}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
