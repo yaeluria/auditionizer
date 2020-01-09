@@ -2,7 +2,7 @@ import React, { useRef} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
-
+import SignInDialog from './SignInDialog';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -89,10 +89,7 @@ const pieceStore = usePieceStore();
         <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
         AUDITIONIZER
         </Typography>
-    
-        <Button href="/connect" color="primary" variant="outlined" className={classes.login}>
-          Login
-        </Button>
+        <SignInDialog />
       </Toolbar>
     </AppBar>
      

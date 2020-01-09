@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 
+
 const config = {
   apiKey: "AIzaSyAG6Ts5nz-WcIJFW2pkpOlmaK3M8wMDp0Q",
   authDomain: "auditionizer.firebaseapp.com",
@@ -13,7 +14,7 @@ const config = {
   };
   
   // Initialize Firebase
-  firebase.initializeApp(config);
+ firebase.initializeApp(config);
 
 
 
