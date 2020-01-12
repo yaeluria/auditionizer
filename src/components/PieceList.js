@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -26,6 +26,11 @@ const PieceList = observer(() => {
   const deletePiece = (e, id) => {
     pieceStore.delete(e);
   };
+
+  useEffect(() => {
+    console.log(pieceStore.pieces);
+    localStorage.setItem('pieces', JSON.stringify(pieceStore.pieces));
+  })
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React, { useRef} from 'react';
+import React, { useRef, useEffect} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';

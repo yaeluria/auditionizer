@@ -7,9 +7,11 @@ export class Piece {
     this.text = text;
   }
 }
+const piecesData = JSON.parse(localStorage.getItem('pieces'))
+
 
 class PieceStore {
-  pieces = [];
+  pieces = piecesData || [];
   selectedPieces = [];
   pieceFieldError = '';
   piecesToSelectFrom = [];
