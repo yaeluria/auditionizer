@@ -4,6 +4,7 @@ import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
 import SignInDialog from './SignInDialog';
 import LoginTooltip from './LoginTooltip';
+import CreateListDialog from './CreateListDialog';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,6 +24,7 @@ import Container from '@material-ui/core/Container';
 
 import { usePieceStore } from '../usePieceStore';
 import { useAuthStore } from '../useAuthStore';
+import AuthStore from '../AuthStore';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -76,14 +78,18 @@ const authStore = useAuthStore();
   const classes = useStyles();
 
   let textInput = useRef(null);
-
-
+  useEffect(()=>{
+   const currentList = localStorage.getItem("currentList");
+   
+   currentList && (pieceStore.currentList = currentList);
+  },[])
+  
   const addPiece = (evt) => {
     evt.preventDefault();
     pieceStore.add(textInput.current.value);
     textInput.current.value = '';
   };
- const saveList = "Save list";
+ const createList = "create a list";
  const chooseList = "Choose from my lists"
 
 
@@ -104,7 +110,7 @@ const authStore = useAuthStore();
         <div className={classes.paper}>
      
        
-          <Typography component="h1" variant="h5"> Piece List </Typography>
+          <Typography component="h1" variant="h5"> {pieceStore.currentList.name || "Piece List"} </Typography>
 
        
           <form onSubmit={addPiece} className={classes.form} noValidate>
@@ -139,11 +145,9 @@ const authStore = useAuthStore();
               <Grid item xs>
               {
                 authStore.loggedIn ?
-                <Button href="#" >
-                  {saveList}
-                </Button>
+               <CreateListDialog />
                  :
-                <LoginTooltip buttonText={saveList} />
+                <LoginTooltip buttonText={createList} />
               }
                
               </Grid>

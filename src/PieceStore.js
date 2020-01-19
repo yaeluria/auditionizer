@@ -1,5 +1,8 @@
 import { observable, action, decorate } from 'mobx';
 
+import firebase from './firebase';
+import AuthStore from './AuthStore';
+
 export class Piece {
   text = '';
   constructor(text) {
@@ -7,16 +10,30 @@ export class Piece {
     this.text = text;
   }
 }
+
 const piecesData = JSON.parse(localStorage.getItem('pieces'))
+
+const userId = (AuthStore.user && AuthStore.user.uid) || null;
+
+
 
 
 class PieceStore {
-  pieces = piecesData || [];
+ 
+  // pieces = AuthStore.!loggedIn ?  (piecesData || []) : 
+  pieces = piecesData || [] ;
   selectedPieces = [];
   pieceFieldError = '';
   piecesToSelectFrom = [];
   selectedOption;
   selectionDone;
+  lists;
+  currentList = {
+    id: '',
+    name: ''
+  };
+  
+  
 
   add = piece => {
     const isSame = this.pieces.some(pieceOnList => pieceOnList.text === piece);
@@ -60,7 +77,9 @@ decorate(PieceStore, {
   select: action,
   pieceFieldError: observable,
   piecesToSelectFrom: observable,
-  selectionDone:observable
+  selectionDone:observable,
+  currentList:observable,
+  lists: observable
 });
 decorate(Piece, {
   text: observable,

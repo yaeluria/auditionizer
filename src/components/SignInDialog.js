@@ -7,6 +7,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from '../firebase';
 
 import { useAuthStore } from '../useAuthStore';
+import AuthStore from '../AuthStore';
 
 
 const SignInDialog = observer(() => { 

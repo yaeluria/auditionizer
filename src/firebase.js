@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 
 
@@ -15,6 +16,7 @@ const config = {
   
   // Initialize Firebase
  firebase.initializeApp(config);
+  
 
 
 
