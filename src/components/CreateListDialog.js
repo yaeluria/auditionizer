@@ -33,14 +33,14 @@ const setName = e => {
 const createList = () => {
     const userId = AuthStore.user.uid;
     const listsRef = firebase.database().ref('users/' + userId+ '/lists');
-    const id = listsRef.push(
+    const refForKey = listsRef.push(
       {
         "name": listName,
         "pieces" : pieceStore.pieces.slice()
       }
     )
     pieceStore.currentList = {
-        id: id,
+        id: refForKey.key,
         name: listName
     }
     localStorage.setItem('currentList', pieceStore.currentList);

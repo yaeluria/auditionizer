@@ -42,7 +42,6 @@ const PieceList = observer(() => {
       console.log("FireB ",snapshot.exists())
       console.log("snapshot recieved");
       if (snapshot && snapshot.exists()) {
-         //Set values in state which can be extracted in jsx in render. 
          console.log(snapshot.val());
          const user = snapshot.val();
          if (user && user.lists){
@@ -54,44 +53,25 @@ const PieceList = observer(() => {
       }})
 }
   }
-,[])
-  const currentListId = (pieceStore.currentList && pieceStore.currentList.id) || 'noId';
+,[userId, pieceStore.lists])
+  const currentListId = (pieceStore.currentList && pieceStore.currentList.id) || null;
   const pieces = (pieceStore.lists && pieceStore.lists[currentListId]) || pieceStore.pieces;
-// useEffect(() => {
-//   const dataArray = [];
-//   /** handleWidgets */
-//   listsRef
-//     .once('value', snap => {
-//       snap.forEach(function(result) {
-//         firebase
-//           .database()
-//           .ref('lists')
-//           .child(result.key)
-//           .once('value', snap => {
-//             if (snap.val()) dataArray.push(snap.val());
-//           });
-//       });
-//     })
-//     .then(function() {
-//       setLists(dataArray);
-//     });
-// }, []); 
+
   useEffect(() => {
     localStorage.setItem('pieces', JSON.stringify(pieceStore.pieces));
     console.log("pieceStore currentList", pieceStore.currentList);
     console.log("currentListId",currentListId);
 
-    if(AuthStore.loggedIn){
+    if(AuthStore.loggedIn && currentListId){
+     
       const userId = AuthStore.user.uid;
-      const userRef = firebase.database().ref('users/' + userId);
-      userRef.set(
-        {
-          "pieces": pieceStore.pieces
-        }
-      )
+      const updates = {};
+      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = pieceStore.pieces.slice();
+      firebase.database().ref().update(updates);
+
     }
 
-  })
+  },[AuthStore.loggedIn, AuthStore.user.uid, currentListId, pieceStore.currentList, pieceStore.pieces])
   
 
   return (
