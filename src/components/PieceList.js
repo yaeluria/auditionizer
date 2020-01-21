@@ -11,6 +11,7 @@ import { usePieceStore } from "../usePieceStore";
 import { useAuthStore } from '../useAuthStore';
 import { observer } from "mobx-react-lite";
 import firebase from '../firebase';
+import {toJS} from 'mobx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,7 +46,9 @@ const PieceList = observer(() => {
          console.log(snapshot.val());
          const user = snapshot.val();
          if (user && user.lists){
+           console.log(user.lists);
            pieceStore.lists = user.lists;
+           console.log(toJS(pieceStore.lists));
          }
          else{
            pieceStore.lists = {}
@@ -53,7 +56,7 @@ const PieceList = observer(() => {
       }})
 }
   }
-,[userId, pieceStore.lists])
+,[userId])
   const currentListId = (pieceStore.currentList && pieceStore.currentList.id) || null;
   const pieces = (pieceStore.lists && pieceStore.lists[currentListId]) || pieceStore.pieces;
 
@@ -79,7 +82,7 @@ const PieceList = observer(() => {
       <Paper className={classes.root}>
         { pieces.length > 0 && (
           <List>
-            {pieceStore.pieces.map((piece, i, arr) => {
+            {pieces.map((piece, i, arr) => {
               const lastItem = arr.length - 1 === i;
 
               return (

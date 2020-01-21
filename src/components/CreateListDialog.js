@@ -39,11 +39,8 @@ const createList = () => {
         "pieces" : pieceStore.pieces.slice()
       }
     )
-    pieceStore.currentList = {
-        id: refForKey.key,
-        name: listName
-    }
-    localStorage.setItem('currentList', pieceStore.currentList);
+    pieceStore.currentListId = refForKey.key;
+    localStorage.setItem('currentListId', pieceStore.currentListId);
     setListName();
     handleClose();
 

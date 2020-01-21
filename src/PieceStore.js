@@ -1,4 +1,4 @@
-import { observable, action, decorate } from 'mobx';
+import { observable, action, decorate, computed } from 'mobx';
 
 import firebase from './firebase';
 import AuthStore from './AuthStore';
@@ -28,12 +28,12 @@ class PieceStore {
   selectedOption;
   selectionDone;
   lists;
-  currentList = {
-    id: '',
-    name: ''
-  };
+  currentListId;
   
   
+//   get currentListName() {
+//     return lists[currentListId].name;
+// }
 
   add = piece => {
     const isSame = this.pieces.some(pieceOnList => pieceOnList.text === piece);
@@ -52,7 +52,7 @@ class PieceStore {
     const itemToRemove = this.pieces.find(item => item.id === p.id);
     this.pieces.remove(itemToRemove);
   };
-
+ 
   
 
   select = () => {
@@ -78,8 +78,9 @@ decorate(PieceStore, {
   pieceFieldError: observable,
   piecesToSelectFrom: observable,
   selectionDone:observable,
-  currentList:observable,
-  lists: observable
+  currentListId:observable,
+  lists: observable,
+  // currentListName: computed
 });
 decorate(Piece, {
   text: observable,

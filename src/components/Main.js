@@ -79,9 +79,8 @@ const authStore = useAuthStore();
 
   let textInput = useRef(null);
   useEffect(()=>{
-   const currentList = localStorage.getItem("currentList");
-   
-   currentList && (pieceStore.currentList = currentList);
+   const currentListId = localStorage.getItem("currentListId");
+   currentListId && (pieceStore.currentListId = currentListId);
   },[])
   
   const addPiece = (evt) => {
@@ -110,7 +109,10 @@ const authStore = useAuthStore();
         <div className={classes.paper}>
      
        
-          <Typography component="h1" variant="h5"> {pieceStore.currentList.name || "Piece List"} </Typography>
+          <Typography component="h1" variant="h5"> 
+            {/* pieceStore.lists[pieceStore.currentListId] ).name */}
+           {(pieceStore.lists && pieceStore.lists[pieceStore.currentListId].name)
+             || "Piece List"} </Typography>
 
        
           <form onSubmit={addPiece} className={classes.form} noValidate>
