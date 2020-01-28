@@ -1,16 +1,15 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import { withStyles} from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import { useAuthStore } from '../useAuthStore';
+import { useAppStore } from '../useAppStore';
  
 const LoginTooltip = observer((props) => {
-  const authStore = useAuthStore();
+  const AppStore = useAppStore();
 
   const openLoginDialog = () => {
-    authStore.openLogin = true;
+    AppStore.openLogin = true;
   }
 
   return (
@@ -25,7 +24,7 @@ const LoginTooltip = observer((props) => {
         </React.Fragment>
       }>
       <span>
-        <Button disabled={!authStore.loggedIn} >{props.buttonText}</Button>
+        <Button disabled={!AppStore.loggedIn} >{props.buttonText}</Button>
       </span>
     </Tooltip>
   );

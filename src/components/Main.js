@@ -5,6 +5,7 @@ import SelectDialog from './SelectDialog';
 import SignInDialog from './SignInDialog';
 import LoginTooltip from './LoginTooltip';
 import CreateListDialog from './CreateListDialog';
+import ChooseListDialog from './ChooseListDialog';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,14 +18,12 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 
-import { usePieceStore } from '../usePieceStore';
-import { useAuthStore } from '../useAuthStore';
-import AuthStore from '../AuthStore';
+import { useAppStore } from '../useAppStore';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -71,21 +70,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Main = observer(() => {
-const pieceStore = usePieceStore();
-const authStore = useAuthStore();
-
-
+  const AppStore = useAppStore();
   const classes = useStyles();
 
   let textInput = useRef(null);
   useEffect(()=>{
    const currentListId = localStorage.getItem("currentListId");
-   currentListId && (pieceStore.currentListId = currentListId);
+   currentListId && (AppStore.currentListId = currentListId);
   },[])
   
   const addPiece = (evt) => {
     evt.preventDefault();
-    pieceStore.add(textInput.current.value);
+    AppStore.add(textInput.current.value);
     textInput.current.value = '';
   };
  const createList = "create a list";
@@ -110,8 +106,7 @@ const authStore = useAuthStore();
      
        
           <Typography component="h1" variant="h5"> 
-            {/* pieceStore.lists[pieceStore.currentListId] ).name */}
-           {(pieceStore.lists && pieceStore.lists[pieceStore.currentListId].name)
+           {(AppStore.lists && AppStore.lists[AppStore.currentListId].name)
              || "Piece List"} </Typography>
 
        
@@ -125,7 +120,7 @@ const authStore = useAuthStore();
               name="pieceName"
               autoFocus
               inputRef={textInput}
-              helperText={pieceStore.pieceFieldError}
+              helperText={AppStore.pieceFieldError}
             />
             <Button
              type="submit"
@@ -146,7 +141,7 @@ const authStore = useAuthStore();
               <Grid container>
               <Grid item xs>
               {
-                authStore.loggedIn ?
+                AppStore.loggedIn ?
                <CreateListDialog />
                  :
                 <LoginTooltip buttonText={createList} />
@@ -155,10 +150,9 @@ const authStore = useAuthStore();
               </Grid>
               <Grid item>
               {
-                authStore.loggedIn ?
-                <Button href="#" >
-                  {chooseList}
-                </Button>
+                AppStore.loggedIn ?
+                
+                <ChooseListDialog />
                  :
                 <LoginTooltip buttonText={chooseList} />
               }

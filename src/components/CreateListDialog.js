@@ -9,15 +9,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-import {usePieceStore} from '../usePieceStore';
-import {useAuthStore} from '../useAuthStore';
+import {useAppStore} from '../useAppStore';
 
 
 const CreateListDialog = observer(() => { 
   const [listName, setListName] = useState()
   const [open, setOpen] = React.useState(false);
-  const pieceStore = usePieceStore();
-  const AuthStore = useAuthStore();
+  const AppStore = useAppStore();
   
   
 const handleClose = () => {
@@ -30,27 +28,29 @@ const handleOpen = () => {
 const setName = e => {
     setListName(e.target.value);
 }
+
 const createList = () => {
-    const userId = AuthStore.user.uid;
+    const userId = AppStore.user.uid;
     const listsRef = firebase.database().ref('users/' + userId+ '/lists');
     const refForKey = listsRef.push(
       {
         "name": listName,
-        "pieces" : pieceStore.pieces.slice()
+        "pieces" : AppStore.pieces.slice()
       }
     )
-    pieceStore.currentListId = refForKey.key;
-    localStorage.setItem('currentListId', pieceStore.currentListId);
+
+    AppStore.currentListId = refForKey.key;
+    localStorage.setItem('currentListId', AppStore.currentListId);
     setListName();
     handleClose();
-
  }
+
 
 
   return (
     <div>
     <Button
-    disabled= {pieceStore.pieces.length <= 0}
+    disabled= {AppStore.pieces.length <= 0}
     onClick = {handleOpen}
     size="medium"
   >

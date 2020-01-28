@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {usePieceStore} from '../usePieceStore';
+import {useAppStore} from '../useAppStore';
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 const SelectDialog = observer(() => { 
 
   const [open, setOpen] = React.useState(false);
-  const pieceStore = usePieceStore();
+  const AppStore = useAppStore();
   const classes = useStyles();
   
   
@@ -28,13 +28,13 @@ const SelectDialog = observer(() => {
   };
 
   const pickNext = () => {
-    pieceStore.select();
+    AppStore.select();
   }
 
   const handlePick = () => {
-    if(pieceStore.pieces.length > 0){
+    if(AppStore.pieces.length > 0){
       setOpen(true);
-      pieceStore.select();
+      AppStore.select();
     }
   
     }
@@ -43,7 +43,7 @@ const SelectDialog = observer(() => {
   return (
     <div>
     <Button
-    disabled= {pieceStore.pieces.length <= 0}
+    disabled= {AppStore.pieces.length <= 0}
     onClick = {handlePick}
     fullWidth
     variant="contained"
@@ -62,7 +62,7 @@ const SelectDialog = observer(() => {
         <DialogTitle id="alert-dialog-title">{"Play"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           {pieceStore.selectedOption ? pieceStore.selectedOption.text : "no more pieces to select"}
+           {AppStore.selectedOption ? AppStore.selectedOption.text : "no more pieces to select"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

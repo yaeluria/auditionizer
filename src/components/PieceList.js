@@ -7,11 +7,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Paper from "@material-ui/core/Paper";
-import { usePieceStore } from "../usePieceStore";
-import { useAuthStore } from '../useAuthStore';
+import { useAppStore } from "../useAppStore";
 import { observer } from "mobx-react-lite";
 import firebase from '../firebase';
-import {toJS} from 'mobx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,12 +21,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PieceList = observer(() => {
-  const AuthStore = useAuthStore();
-  const pieceStore = usePieceStore();
+  const AppStore = useAppStore();
   const classes = useStyles();
-  const userId = AuthStore.loggedIn ? AuthStore.user.uid : null; 
+  const userId = AppStore.loggedIn ? AppStore.user.uid : null; 
   const deletePiece = (e, id) => {
-    pieceStore.delete(e);
+    AppStore.delete(e);
   };
 
   useEffect(()=>{
@@ -40,41 +37,32 @@ const PieceList = observer(() => {
       'users/' + userId 
     )
     .on("value", snapshot => {
-      console.log("FireB ",snapshot.exists())
-      console.log("snapshot recieved");
       if (snapshot && snapshot.exists()) {
-         console.log(snapshot.val());
          const user = snapshot.val();
          if (user && user.lists){
-           console.log(user.lists);
-           pieceStore.lists = user.lists;
-           console.log(toJS(pieceStore.lists));
+           AppStore.lists = {...user.lists};
          }
          else{
-           pieceStore.lists = {}
+           AppStore.lists = {}
          }
       }})
 }
   }
-,[userId])
-  const currentListId = (pieceStore.currentList && pieceStore.currentList.id) || null;
-  const pieces = (pieceStore.lists && pieceStore.lists[currentListId]) || pieceStore.pieces;
-
+,[])
+  const userUid = AppStore.user && AppStore.user.uid
+  const currentListId =  AppStore.currentListId || null;
+  const pieces = (AppStore.lists && currentListId) ? (AppStore.lists[currentListId]).pieces : AppStore.pieces;
   useEffect(() => {
-    localStorage.setItem('pieces', JSON.stringify(pieceStore.pieces));
-    console.log("pieceStore currentList", pieceStore.currentList);
-    console.log("currentListId",currentListId);
-
-    if(AuthStore.loggedIn && currentListId){
-     
-      const userId = AuthStore.user.uid;
+    localStorage.setItem('pieces', JSON.stringify(AppStore.pieces));
+    if(AppStore.loggedIn && currentListId){
+      const userId = AppStore.user.uid;
       const updates = {};
-      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = pieceStore.pieces.slice();
+      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice();
       firebase.database().ref().update(updates);
 
     }
 
-  },[AuthStore.loggedIn, AuthStore.user.uid, currentListId, pieceStore.currentList, pieceStore.pieces])
+  },[AppStore.loggedIn, userUid, currentListId, AppStore.currentList, AppStore.pieces])
   
 
   return (

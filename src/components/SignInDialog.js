@@ -6,14 +6,12 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 import firebase from '../firebase';
 
-import { useAuthStore } from '../useAuthStore';
-import AuthStore from '../AuthStore';
+import { useAppStore } from '../useAppStore';
 
 
 const SignInDialog = observer(() => { 
 
-  // const [open, setOpen] = React.useState(false);
-  const authStore = useAuthStore();
+  const AppStore = useAppStore();
   const uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
@@ -26,12 +24,10 @@ const SignInDialog = observer(() => {
   };
   
   const openLogin = () => {
-      // setOpen(true);
-      authStore.openLogin = true;
+      AppStore.openLogin = true;
   }
   const closeLogin = () => {
-    // setOpen(false);
-    authStore.openLogin = false;
+    AppStore.openLogin = false;
   };
 
   const signOut = () => {
@@ -43,7 +39,7 @@ const SignInDialog = observer(() => {
      
 
      {
-       authStore.loggedIn ?
+       AppStore.loggedIn ?
        <Button
         fullWidth
         variant="contained"
@@ -65,7 +61,7 @@ const SignInDialog = observer(() => {
       </Button>
      }  
       <Dialog
-        open={authStore.openLogin}
+        open={AppStore.openLogin}
         onClose={closeLogin}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

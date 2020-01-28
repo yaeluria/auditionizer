@@ -1,7 +1,5 @@
-import { observable, action, decorate, computed } from 'mobx';
+import { observable, action, decorate, toJS } from 'mobx';
 
-import firebase from './firebase';
-import AuthStore from './AuthStore';
 
 export class Piece {
   text = '';
@@ -13,14 +11,8 @@ export class Piece {
 
 const piecesData = JSON.parse(localStorage.getItem('pieces'))
 
-const userId = (AuthStore.user && AuthStore.user.uid) || null;
+class AppStore {
 
-
-
-
-class PieceStore {
- 
-  // pieces = AuthStore.!loggedIn ?  (piecesData || []) : 
   pieces = piecesData || [] ;
   selectedPieces = [];
   pieceFieldError = '';
@@ -29,12 +21,14 @@ class PieceStore {
   selectionDone;
   lists;
   currentListId;
+  loggedIn = false;
+  user = null;
+  openLogin = false;
   
-  
-//   get currentListName() {
-//     return lists[currentListId].name;
-// }
 
+
+
+  
   add = piece => {
     const isSame = this.pieces.some(pieceOnList => pieceOnList.text === piece);
     if (!piece) {
@@ -48,12 +42,15 @@ class PieceStore {
     }
   };
 
+  choose = p => {
+    this.currentListId = p
+  }
+
   delete = p => {
+    console.log(toJS(this.pieces));
     const itemToRemove = this.pieces.find(item => item.id === p.id);
     this.pieces.remove(itemToRemove);
   };
- 
-  
 
   select = () => {
     if(this.piecesToSelectFrom.length === 0 && this.selectionDone !== true){
@@ -69,7 +66,7 @@ class PieceStore {
   }
 
 }
-decorate(PieceStore, {
+decorate(AppStore, {
   pieces: observable,
   add: action,
   selectedOption: observable,
@@ -80,10 +77,12 @@ decorate(PieceStore, {
   selectionDone:observable,
   currentListId:observable,
   lists: observable,
-  // currentListName: computed
+  loggedIn: observable,
+  user: observable,
+  openLogin: observable,
 });
 decorate(Piece, {
   text: observable,
 });
 
-export default new PieceStore();
+export default new AppStore();
