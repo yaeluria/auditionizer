@@ -20,9 +20,9 @@ firebase.auth().onAuthStateChanged((user) => {
       uid: user.uid
     };
   }
-  else{
-    AppStore.loggedIn = false;
-  }
+  // else{
+  //   AppStore.loggedIn = false;
+  // }
 
   render(<App />, document.getElementById('root'));
 

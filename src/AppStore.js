@@ -1,5 +1,5 @@
 import { observable, action, decorate, toJS } from 'mobx';
-
+import firebase from './firebase';
 
 export class Piece {
   text = '';
@@ -24,6 +24,76 @@ class AppStore {
   loggedIn = false;
   user = null;
   openLogin = false;
+
+  // useEffect(()=>{
+  //   console.log("component mount", userId);
+  //   if(userId){
+  //     firebase
+  //     .database()
+  //     .ref(
+  //       'users/' + userId 
+  //     )
+  //     .on("value", snapshot => {
+  //       if (snapshot && snapshot.exists()) {
+  //          const user = snapshot.val();
+  //          if (user && user.lists){
+  //            AppStore.lists = {...user.lists};
+  //          }
+  //          else{
+  //            AppStore.lists = {}
+  //          }
+  //       }})
+  // }
+  //   }
+  // ,[])
+  //   const userUid = AppStore.user && AppStore.user.uid
+  //   const currentListId =  AppStore.currentListId || null;
+  //   const pieces = (AppStore.lists && currentListId) ? (AppStore.lists[currentListId]).pieces : AppStore.pieces;
+  //   useEffect(() => {
+  //     localStorage.setItem('pieces', JSON.stringify(AppStore.pieces));
+  //     if(AppStore.loggedIn && currentListId){
+  //       const userId = AppStore.user.uid;
+  //       const updates = {};
+  //       updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice();
+  //       firebase.database().ref().update(updates);
+  
+  //     }
+  
+  //   },[AppStore.loggedIn, userUid, currentListId, AppStore.currentList, AppStore.pieces])
+
+  // constructor() {
+  //   const userId = this.user && this.user.uid
+  //   if(userId){
+  //     firebase
+  //         .database()
+  //         .ref(
+  //           'users/' + userId 
+  //         )
+  //         .on("value", snapshot => {
+  //           this.lists = {};
+  //           if (snapshot && snapshot.exists()) {
+  //              const dbUser = snapshot.val();
+  //              if (dbUser && dbUser.lists){
+  //               //  this.lists = {...dbUser.lists};
+  //                this.lists = {
+  //                 name: "test",
+  //                 number: 2
+  //               }
+  //              }
+  //           }})
+  //     }
+
+  //   }
+    // fb.products.on('value', (snapshot) => {
+    //   this.products = [];
+    //   snapshot.forEach((child) => {
+    //     this.products.push({
+    //       id: child.key,
+    //       ...child.val()
+    //     });
+    //   });
+    // });
+  
   
 
 

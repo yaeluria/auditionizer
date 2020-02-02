@@ -1,10 +1,7 @@
-import React, { useRef, useEffect, useState} from 'react';
+import React, { useRef, useEffect} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
-import PieceListContainer from './PieceListContainer';
-import NotLoggedInScreen from './NotLoggedInScreen';
 import SelectDialog from './SelectDialog';
-import SignInDialog from './SignInDialog';
 import LoginTooltip from './LoginTooltip';
 import CreateListDialog from './CreateListDialog';
 import ChooseListDialog from './ChooseListDialog';
@@ -18,8 +15,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -71,19 +66,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Main = observer(() => {
+const PieceListContainer = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
 
   let textInput = useRef(null);
   useEffect(()=>{
-  //  const currentListId = localStorage.getItem("currentListId");
-  //  currentListId && (AppStore.currentListId = currentListId);
-   if (AppStore.isLoggedIn){
-     setIsLoggedIn(true);
-     console.log(AppStore.loggedIn , "AppStore.logged in should be true")
-   } 
-  }, [AppStore.isLoggedIn])
+   const currentListId = localStorage.getItem("currentListId");
+   currentListId && (AppStore.currentListId = currentListId);
+  },[])
   
   const addPiece = (evt) => {
     evt.preventDefault();
@@ -92,27 +83,79 @@ const Main = observer(() => {
   };
  const createList = "create a list";
  const chooseList = "Choose from my lists"
- const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
   return (
-      <div>
-      <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
-      <Toolbar className={classes.toolbar}>
-        <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-        AUDITIONIZER
-        </Typography>
-        <SignInDialog />
-      </Toolbar>
-    </AppBar>
+   <div>     
+    <Container component="main" maxWidth="xs">
+        <CssBaseline />
+      
+        <div className={classes.paper}>
      
-  {isLoggedIn?
-  <h1>logged in</h1>:
-  <h1>not logged in</h1>
-  }
+       
+          <Typography component="h1" variant="h5"> 
+           {(AppStore.lists && AppStore.lists[AppStore.currentListId].name)
+             || "Piece List"} </Typography>
+
+       
+          <form onSubmit={addPiece} className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="pieceName"
+              label="Piece Name"
+              name="pieceName"
+              autoFocus
+              inputRef={textInput}
+              helperText={AppStore.pieceFieldError}
+            />
+            <Button
+             type="submit"
+             variant="outlined"
+             fullWidth
+             color="primary"
+            >
+            ADD
+            </Button>
+           <PieceList />
+          
+            <FormControlLabel
+              control={<Checkbox value="autoStop" color="primary" />}
+              label="Let me know when I should move on to the next piece"
+            />
+       
+            <SelectDialog />
+              <Grid container>
+              <Grid item xs>
+              {
+                AppStore.loggedIn ?
+               <CreateListDialog />
+                 :
+                <LoginTooltip buttonText={createList} />
+              }
+               
+              </Grid>
+              <Grid item>
+              {
+                AppStore.loggedIn ?
+                
+                <ChooseListDialog />
+                 :
+                <LoginTooltip buttonText={chooseList} />
+              }
+
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
+      </Container>
       </div>
       
    
   );
 })
-export default Main;
+export default PieceListContainer;
