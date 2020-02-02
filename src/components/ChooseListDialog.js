@@ -49,6 +49,7 @@ const lists = listsObject && Object.values(listsObject);
 
 const handleOpen = () => {
       setOpen(true);
+      console.log(AppStore.lists);
   }
 
   return (
@@ -63,7 +64,7 @@ const handleOpen = () => {
  
   
       <Dialog open={open} onClose={handleClose} aria-labelledby="create-list-title">
-        <DialogTitle> id="choose-list-title">Choose a list from your lists</DialogTitle>
+        <DialogTitle id="choose-list-title">Choose a list from your lists</DialogTitle>
         <Paper className={classes.root}>
         { lists && lists.length > 0 && (
           <List>

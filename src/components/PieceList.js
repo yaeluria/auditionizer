@@ -53,11 +53,11 @@ const PieceList = observer(() => {
   const currentListId =  AppStore.currentListId || null;
   const pieces = (AppStore.lists && currentListId) ? (AppStore.lists[currentListId]).pieces : AppStore.pieces;
   useEffect(() => {
-    localStorage.setItem('pieces', JSON.stringify(AppStore.pieces));
+    localStorage.setItem('pieces', JSON.stringify(pieces));
     if(AppStore.loggedIn && currentListId){
       const userId = AppStore.user.uid;
       const updates = {};
-      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice();
+      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice(); //this maybe wrong?
       firebase.database().ref().update(updates);
 
     }
