@@ -7,7 +7,7 @@ import Main from './components/Main'
 import NotLoggedInScreen from './components/NotLoggedInScreen';
 
 export default function App() {
-  const AppStore = useAppStore()
+  // const AppStore = useAppStore()
 
     return (
           <Router>

@@ -76,20 +76,15 @@ const Main = observer(() => {
   const classes = useStyles();
 
   let textInput = useRef(null);
-  useEffect(()=>{
-  //  const currentListId = localStorage.getItem("currentListId");
-  //  currentListId && (AppStore.currentListId = currentListId);
-   if (AppStore.isLoggedIn){
-     setIsLoggedIn(true);
-     console.log(AppStore.loggedIn , "AppStore.logged in should be true")
-   } 
-  }, [AppStore.isLoggedIn])
   
   const addPiece = (evt) => {
     evt.preventDefault();
     AppStore.add(textInput.current.value);
-    textInput.current.value = '';
+    if(AppStore.pieceFieldError.length < 0){
+      textInput.current.value = '';
+    }
   };
+
  const createList = "create a list";
  const chooseList = "Choose from my lists"
  const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -105,11 +100,13 @@ const Main = observer(() => {
         <SignInDialog />
       </Toolbar>
     </AppBar>
-     
-  {isLoggedIn?
-  <h1>logged in</h1>:
-  <h1>not logged in</h1>
-  }
+    <div>
+      {AppStore.loggedIn?
+ <PieceListContainer /> :
+ <NotLoggedInScreen />
+  }  
+    </div> 
+ 
       </div>
       
    

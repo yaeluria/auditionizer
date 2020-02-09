@@ -71,15 +71,19 @@ const PieceListContainer = observer(() => {
   const classes = useStyles();
 
   let textInput = useRef(null);
-  useEffect(()=>{
-   const currentListId = localStorage.getItem("currentListId");
-   currentListId && (AppStore.currentListId = currentListId);
-  },[])
+//   useEffect(()=>{
+//    const currentListId = localStorage.getItem("currentListId");
+//    currentListId && (AppStore.currentListId = currentListId); //do I need this?
+//   },[])
   
   const addPiece = (evt) => {
     evt.preventDefault();
     AppStore.add(textInput.current.value);
-    textInput.current.value = '';
+   
+    if(!AppStore.pieceFieldError){
+        textInput.current.value = '';
+      }
+    
   };
  const createList = "create a list";
  const chooseList = "Choose from my lists"
@@ -94,7 +98,7 @@ const PieceListContainer = observer(() => {
      
        
           <Typography component="h1" variant="h5"> 
-           {(AppStore.lists && AppStore.lists[AppStore.currentListId].name)
+           {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
              || "Piece List"} </Typography>
 
        
@@ -125,12 +129,12 @@ const PieceListContainer = observer(() => {
               label="Let me know when I should move on to the next piece"
             />
        
-            <SelectDialog />
+            {/* <SelectDialog /> */}
               <Grid container>
               <Grid item xs>
               {
                 AppStore.loggedIn ?
-               <CreateListDialog />
+                <h1>create list</h1>
                  :
                 <LoginTooltip buttonText={createList} />
               }

@@ -1,4 +1,4 @@
-import { observable, action, decorate, toJS } from 'mobx';
+import { observable, action, decorate, toJS, computed } from 'mobx';
 import firebase from './firebase';
 
 export class Piece {
@@ -8,112 +8,45 @@ export class Piece {
     this.text = text;
   }
 }
-
-const piecesData = JSON.parse(localStorage.getItem('pieces'))
+const localCurrentListId = localStorage.getItem("currentListId")
 
 class AppStore {
-
-  pieces = piecesData || [] ;
   selectedPieces = [];
   pieceFieldError = '';
   piecesToSelectFrom = [];
   selectedOption;
   selectionDone;
-  lists;
-  currentListId;
+  lists = {};
+  currentListId = (this.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
   loggedIn = false;
   user = null;
   openLogin = false;
-
-  // useEffect(()=>{
-  //   console.log("component mount", userId);
-  //   if(userId){
-  //     firebase
-  //     .database()
-  //     .ref(
-  //       'users/' + userId 
-  //     )
-  //     .on("value", snapshot => {
-  //       if (snapshot && snapshot.exists()) {
-  //          const user = snapshot.val();
-  //          if (user && user.lists){
-  //            AppStore.lists = {...user.lists};
-  //          }
-  //          else{
-  //            AppStore.lists = {}
-  //          }
-  //       }})
-  // }
-  //   }
-  // ,[])
-  //   const userUid = AppStore.user && AppStore.user.uid
-  //   const currentListId =  AppStore.currentListId || null;
-  //   const pieces = (AppStore.lists && currentListId) ? (AppStore.lists[currentListId]).pieces : AppStore.pieces;
-  //   useEffect(() => {
-  //     localStorage.setItem('pieces', JSON.stringify(AppStore.pieces));
-  //     if(AppStore.loggedIn && currentListId){
-  //       const userId = AppStore.user.uid;
-  //       const updates = {};
-  //       updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice();
-  //       firebase.database().ref().update(updates);
+  pieces = [];
   
-  //     }
-  
-  //   },[AppStore.loggedIn, userUid, currentListId, AppStore.currentList, AppStore.pieces])
-
-  // constructor() {
-  //   const userId = this.user && this.user.uid
-  //   if(userId){
-  //     firebase
-  //         .database()
-  //         .ref(
-  //           'users/' + userId 
-  //         )
-  //         .on("value", snapshot => {
-  //           this.lists = {};
-  //           if (snapshot && snapshot.exists()) {
-  //              const dbUser = snapshot.val();
-  //              if (dbUser && dbUser.lists){
-  //               //  this.lists = {...dbUser.lists};
-  //                this.lists = {
-  //                 name: "test",
-  //                 number: 2
-  //               }
-  //              }
-  //           }})
-  //     }
-
-  //   }
-    // fb.products.on('value', (snapshot) => {
-    //   this.products = [];
-    //   snapshot.forEach((child) => {
-    //     this.products.push({
-    //       id: child.key,
-    //       ...child.val()
-    //     });
-    //   });
-    // });
-  
-  
-
-
 
   
   add = piece => {
-    const isSame = this.pieces.some(pieceOnList => pieceOnList.text === piece);
+    console.log("currentListId", this.currentListId);
+    console.log("lists", toJS(this.lists));
+    
+    console.log("pieces of current list" , toJS(this.lists[this.currentListId].pieces))
+    console.log("pieces before adding" , toJS(this.pieces))
+    const isSame = this.pieces && this.pieces.some(pieceOnList => pieceOnList.text === piece);
     if (!piece) {
       this.pieceFieldError = 'Please enter a piece name';
     } else if (isSame){
       this.pieceFieldError = 'You already have this piece in your piece list';
     }
     else {
-      this.pieces.push(new Piece(piece));
       this.pieceFieldError = undefined;
-    }
+      const userId = this.user.uid;
+      const currentListRef = firebase.database().ref('users/' + userId+ '/lists/' + this.currentListId + "/pieces" );
+      currentListRef.push(new Piece(piece))}
+      console.log(toJS(this.pieces));
   };
 
   choose = p => {
-    this.currentListId = p
+    this.currentListId = p;
   }
 
   delete = p => {
@@ -137,6 +70,7 @@ class AppStore {
 
 }
 decorate(AppStore, {
+  // pieces: observable,
   pieces: observable,
   add: action,
   selectedOption: observable,

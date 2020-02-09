@@ -19,10 +19,12 @@ firebase.auth().onAuthStateChanged((user) => {
       photoURL: user.photoURL, 
       uid: user.uid
     };
+ 
+    
   }
-  // else{
-  //   AppStore.loggedIn = false;
-  // }
+  else{
+    AppStore.loggedIn = false;
+  }
 
   render(<App />, document.getElementById('root'));
 

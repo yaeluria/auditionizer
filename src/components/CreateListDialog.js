@@ -30,17 +30,19 @@ const setName = e => {
 }
 
 const createList = () => {
+    
     const userId = AppStore.user.uid;
     const listsRef = firebase.database().ref('users/' + userId+ '/lists');
+    console.log(AppStore.pieces.slice());
     const refForKey = listsRef.push(
       {
         "name": listName,
-        "pieces" : AppStore.pieces.slice()
+        // "pieces" : AppStore.pieces.slice() //this may be wrong
       }
     )
 
-    AppStore.currentListId = refForKey.key;
-    localStorage.setItem('currentListId', AppStore.currentListId);
+    const currentListId = refForKey.key;
+    localStorage.setItem('currentListId', currentListId);
     setListName();
     handleClose();
  }

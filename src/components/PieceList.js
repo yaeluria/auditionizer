@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {toJS} from 'mobx';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -15,7 +16,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
-
     overflowX: "auto"
   }
 }));
@@ -23,14 +23,32 @@ const useStyles = makeStyles(theme => ({
 const PieceList = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
-  const userId = AppStore.loggedIn ? AppStore.user.uid : null; 
+
+  const userId = AppStore.loggedIn && AppStore.user ? AppStore.user.uid : null; 
   const deletePiece = (e, id) => {
-    AppStore.delete(e);
+    // AppStore.delete(e);
   };
 
   useEffect(()=>{
   console.log("component mount", userId);
   if(userId){
+    const localCurrentListId = localStorage.getItem("currentListId")
+    AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
+
+    console.log(AppStore.currentListId);
+    if(!AppStore.currentListId){
+      const listsRef = firebase.database().ref('users/' + userId+ '/lists');
+      const refForKey = listsRef.push(
+      {
+        "name": "Piece List",
+      }
+    )
+
+    const currentListId = refForKey.key;
+    AppStore.currentListId  = currentListId;
+    localStorage.setItem("currentListId", currentListId)
+    }
+    console.log(AppStore.currentListId);
     firebase
     .database()
     .ref(
@@ -40,7 +58,11 @@ const PieceList = observer(() => {
       if (snapshot && snapshot.exists()) {
          const user = snapshot.val();
          if (user && user.lists){
+           console.log({...user.lists});
            AppStore.lists = {...user.lists};
+    
+       const piecesObject = user.lists[currentListId] && toJS(user.lists[currentListId].pieces)
+       AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
          }
          else{
            AppStore.lists = {}
@@ -48,27 +70,34 @@ const PieceList = observer(() => {
       }})
 }
   }
-,[])
-  const userUid = AppStore.user && AppStore.user.uid
+,[userId])
   const currentListId =  AppStore.currentListId || null;
-  const pieces = (AppStore.lists && currentListId) ? (AppStore.lists[currentListId]).pieces : AppStore.pieces;
-  useEffect(() => {
-    localStorage.setItem('pieces', JSON.stringify(pieces));
-    if(AppStore.loggedIn && currentListId){
-      const userId = AppStore.user.uid;
-      const updates = {};
-      updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice(); //this maybe wrong?
-      firebase.database().ref().update(updates);
+  
+  const piecesObject = ((AppStore.lists && currentListId) ? (toJS(AppStore.lists[currentListId] || {}).pieces) : toJS(AppStore.pieces)) || [];
+  console.log(piecesObject);
 
-    }
+  // for (const pieceId in piecesObject) {
+  //     piecesObject[pieceId].id = pieceId;
+  //   }
+  const pieces = piecesObject && Object.values(piecesObject);
+  console.log(pieces);
+  // useEffect(() => {
+  //   localStorage.setItem('pieces', JSON.stringify(pieces));
+  //   if(AppStore.loggedIn && currentListId){
+  //     const userId = AppStore.user.uid;
+  //     const updates = {};
+  //     updates['users/' + userId  + '/lists/' + currentListId + '/pieces'] = AppStore.pieces.slice(); //this maybe wrong?
+  //     firebase.database().ref().update(updates);
 
-  },[AppStore.loggedIn, userUid, currentListId, AppStore.currentList, AppStore.pieces])
+  //   }
+
+  // },[AppStore.loggedIn, userUid, currentListId, AppStore.currentList, AppStore.pieces, AppStore.user.uid, pieces])
   
 
   return (
     <div>
       <Paper className={classes.root}>
-        { pieces.length > 0 && (
+        { pieces && pieces.length > 0 && (
           <List>
             {pieces.map((piece, i, arr) => {
               const lastItem = arr.length - 1 === i;
