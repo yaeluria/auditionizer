@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import {toJS} from 'mobx';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -19,12 +20,46 @@ firebase.auth().onAuthStateChanged((user) => {
       photoURL: user.photoURL, 
       uid: user.uid
     };
- 
-    
-  }
-  else{
-    AppStore.loggedIn = false;
-  }
+      const localCurrentListId = localStorage.getItem("currentListId")
+      const userId = user.uid;
+      AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
+  
+      console.log(AppStore.currentListId);
+      if(!AppStore.currentListId){
+        const listsRef = firebase.database().ref('users/' + userId+ '/lists');
+        const refForKey = listsRef.push(
+        {
+          "name": "Piece List",
+        }
+      )
+  
+      const currentListId = refForKey.key;
+      AppStore.currentListId  = currentListId;
+      localStorage.setItem("currentListId", currentListId)
+      }
+      console.log(AppStore.currentListId);
+      firebase
+      .database()
+      .ref(
+        'users/' + userId 
+      )
+      .on("value", snapshot => {
+        if (snapshot && snapshot.exists()) {
+          const user = snapshot.val();
+                   if (user && user.lists){
+                     console.log({...user.lists});
+                     AppStore.lists = {...user.lists};
+              
+                 const piecesObject = user.lists[AppStore.currentListId] && toJS(user.lists[AppStore.currentListId].pieces)
+                 AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
+                   }}
+                   else{
+                     AppStore.lists = {}
+                   }
+                })
+          }
+            
+  
 
   render(<App />, document.getElementById('root'));
 

@@ -29,48 +29,48 @@ const PieceList = observer(() => {
     // AppStore.delete(e);
   };
 
-  useEffect(()=>{
-  console.log("component mount", userId);
-  if(userId){
-    const localCurrentListId = localStorage.getItem("currentListId")
-    AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
+//   useEffect(()=>{
+//   console.log("component mount", userId);
+//   if(userId){
+//     const localCurrentListId = localStorage.getItem("currentListId")
+//     AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
 
-    console.log(AppStore.currentListId);
-    if(!AppStore.currentListId){
-      const listsRef = firebase.database().ref('users/' + userId+ '/lists');
-      const refForKey = listsRef.push(
-      {
-        "name": "Piece List",
-      }
-    )
+//     console.log(AppStore.currentListId);
+//     if(!AppStore.currentListId){
+//       const listsRef = firebase.database().ref('users/' + userId+ '/lists');
+//       const refForKey = listsRef.push(
+//       {
+//         "name": "Piece List",
+//       }
+//     )
 
-    const currentListId = refForKey.key;
-    AppStore.currentListId  = currentListId;
-    localStorage.setItem("currentListId", currentListId)
-    }
-    console.log(AppStore.currentListId);
-    firebase
-    .database()
-    .ref(
-      'users/' + userId 
-    )
-    .on("value", snapshot => {
-      if (snapshot && snapshot.exists()) {
-         const user = snapshot.val();
-         if (user && user.lists){
-           console.log({...user.lists});
-           AppStore.lists = {...user.lists};
+//     const currentListId = refForKey.key;
+//     AppStore.currentListId  = currentListId;
+//     localStorage.setItem("currentListId", currentListId)
+//     }
+//     console.log(AppStore.currentListId);
+//     firebase
+//     .database()
+//     .ref(
+//       'users/' + userId 
+//     )
+//     .on("value", snapshot => {
+//       if (snapshot && snapshot.exists()) {
+//          const user = snapshot.val();
+//          if (user && user.lists){
+//            console.log({...user.lists});
+//            AppStore.lists = {...user.lists};
     
-       const piecesObject = user.lists[currentListId] && toJS(user.lists[currentListId].pieces)
-       AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
-         }
-         else{
-           AppStore.lists = {}
-         }
-      }})
-}
-  }
-,[userId])
+//        const piecesObject = user.lists[currentListId] && toJS(user.lists[currentListId].pieces)
+//        AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
+//          }
+//          else{
+//            AppStore.lists = {}
+//          }
+//       }})
+// }
+//   }
+// ,[userId])
   const currentListId =  AppStore.currentListId || null;
   
   const piecesObject = ((AppStore.lists && currentListId) ? (toJS(AppStore.lists[currentListId] || {}).pieces) : toJS(AppStore.pieces)) || [];

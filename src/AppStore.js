@@ -1,4 +1,4 @@
-import { observable, action, decorate, toJS, computed } from 'mobx';
+import { observe, observable, action, decorate, toJS, computed } from 'mobx';
 import firebase from './firebase';
 
 export class Piece {
@@ -11,6 +11,7 @@ export class Piece {
 const localCurrentListId = localStorage.getItem("currentListId")
 
 class AppStore {
+
   selectedPieces = [];
   pieceFieldError = '';
   piecesToSelectFrom = [];
@@ -45,9 +46,11 @@ class AppStore {
       console.log(toJS(this.pieces));
   };
 
+ 
   choose = p => {
     this.currentListId = p;
   }
+ 
 
   delete = p => {
     console.log(toJS(this.pieces));
@@ -90,3 +93,4 @@ decorate(Piece, {
 });
 
 export default new AppStore();
+
