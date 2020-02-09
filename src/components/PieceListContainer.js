@@ -132,24 +132,12 @@ const PieceListContainer = observer(() => {
             {/* <SelectDialog /> */}
               <Grid container>
               <Grid item xs>
-              {
-                AppStore.loggedIn ?
-                <h1>create list</h1>
-                 :
-                <LoginTooltip buttonText={createList} />
-              }
-               
+                 <CreateListDialog />
+        
               </Grid>
               <Grid item>
-              {
-                AppStore.loggedIn ?
-                
                 <ChooseListDialog />
-                 :
-                <LoginTooltip buttonText={chooseList} />
-              }
-
-              </Grid>
+                </Grid>
             </Grid>
           </form>
         </div>
