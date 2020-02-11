@@ -20,24 +20,7 @@ firebase.auth().onAuthStateChanged((user) => {
       photoURL: user.photoURL, 
       uid: user.uid
     };
-      const localCurrentListId = localStorage.getItem("currentListId")
-      const userId = user.uid;
-      AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
-  
-      console.log(AppStore.currentListId);
-      if(!AppStore.currentListId){
-        const listsRef = firebase.database().ref('users/' + userId+ '/lists');
-        const refForKey = listsRef.push(
-        {
-          "name": "Piece List",
-        }
-      )
-  
-      const currentListId = refForKey.key;
-      AppStore.currentListId  = currentListId;
-      localStorage.setItem("currentListId", currentListId)
-      }
-      console.log(AppStore.currentListId);
+    const userId = user.uid;
       firebase
       .database()
       .ref(
@@ -56,9 +39,33 @@ firebase.auth().onAuthStateChanged((user) => {
                    else{
                      AppStore.lists = {}
                    }
+                   const localCurrentListId = localStorage.getItem("currentListId")
+                   console.log(localCurrentListId);
+                   console.log(toJS(AppStore.lists));
+                
+                   AppStore.currentListId = (AppStore.lists.hasOwnProperty(localCurrentListId) && localCurrentListId) || null ;
+               
+                   console.log(AppStore.currentListId);
+                   if(!AppStore.currentListId){
+                     const listsRef = firebase.database().ref('users/' + userId+ '/lists');
+                     // first make sure user doesn't have a list called piece list
+                     const refForKey = listsRef.push(
+                     {
+                       "name": "Piece List",
+                     }
+                   )
+               
+                   const currentListId = refForKey.key;
+                   AppStore.currentListId  = currentListId;
+                   localStorage.setItem("currentListId", currentListId)
+                   }
+                   console.log(AppStore.currentListId);
                 })
           }
-            
+            else{
+              AppStore.loggedIn = false;
+              AppStore.user = null;
+            }
   
 
   render(<App />, document.getElementById('root'));
