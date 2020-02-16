@@ -1,6 +1,7 @@
 import React, { useRef, useEffect} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
+import SelectDialog from './SelectDialog';
 import CreateListDialog from './CreateListDialog';
 import ChooseListDialog from './ChooseListDialog';
 
@@ -117,7 +118,7 @@ const PieceListContainer = observer(() => {
               label="Let me know when I should move on to the next piece"
             />
        
-            {/* <SelectDialog /> */}
+            <SelectDialog />
               <Grid container>
               <Grid item xs>
                  <CreateListDialog />

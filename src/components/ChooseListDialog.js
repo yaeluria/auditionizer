@@ -49,7 +49,6 @@ const lists = listsObject && Object.values(listsObject);
 
 const handleOpen = () => {
       setOpen(true);
-      console.log(AppStore.lists);
   }
 
   return (
