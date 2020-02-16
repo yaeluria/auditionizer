@@ -1,8 +1,6 @@
 import React, { useRef, useEffect} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
-import SelectDialog from './SelectDialog';
-import LoginTooltip from './LoginTooltip';
 import CreateListDialog from './CreateListDialog';
 import ChooseListDialog from './ChooseListDialog';
 
@@ -71,11 +69,7 @@ const PieceListContainer = observer(() => {
   const classes = useStyles();
 
   let textInput = useRef(null);
-//   useEffect(()=>{
-//    const currentListId = localStorage.getItem("currentListId");
-//    currentListId && (AppStore.currentListId = currentListId); //do I need this?
-//   },[])
-  
+
   const addPiece = (evt) => {
     evt.preventDefault();
     AppStore.add(textInput.current.value);
@@ -85,18 +79,12 @@ const PieceListContainer = observer(() => {
       }
     
   };
- const createList = "create a list";
- const chooseList = "Choose from my lists"
-
 
   return (
    <div>     
     <Container component="main" maxWidth="xs">
         <CssBaseline />
-      
         <div className={classes.paper}>
-     
-       
           <Typography component="h1" variant="h5"> 
            {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
              || "Piece List"} </Typography>
