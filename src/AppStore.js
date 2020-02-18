@@ -53,9 +53,11 @@ class AppStore {
  
 
   delete = p => {
-    console.log(toJS(this.pieces));
-    const itemToRemove = this.pieces.find(item => item.id === p.id);
-    this.pieces.remove(itemToRemove);
+      console.log(p);
+      const userId = this.user.uid;
+      const pieceToDeleteRef = firebase.database().ref('users/' + userId+ '/lists/' + this.currentListId + "/pieces/" + p[0]);
+      pieceToDeleteRef.remove();
+
   };
 
   select = () => {
@@ -73,7 +75,6 @@ class AppStore {
 
 }
 decorate(AppStore, {
-  // pieces: observable,
   pieces: observable,
   add: action,
   selectedOption: observable,
