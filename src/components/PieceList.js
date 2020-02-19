@@ -27,6 +27,7 @@ const PieceList = observer(() => {
   const deletePiece = (e) => {
     console.log(piecesObject);
     AppStore.delete(e);
+
   };
 
   const currentListId =  AppStore.currentListId || null;

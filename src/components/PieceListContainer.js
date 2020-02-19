@@ -1,4 +1,4 @@
-import React, { useRef, useEffect} from 'react';
+import React, { useRef, useState} from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
@@ -68,18 +68,26 @@ const useStyles = makeStyles(theme => ({
 const PieceListContainer = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
+  const [isText, setIsText] = useState(false);
 
   let textInput = useRef(null);
 
   const addPiece = (evt) => {
     evt.preventDefault();
     AppStore.add(textInput.current.value);
-   
     if(!AppStore.pieceFieldError){
         textInput.current.value = '';
       }
-    
   };
+  const checkText = e => {
+    e.target.value? setIsText(true) : setIsText(false);
+    if(AppStore.pieces && AppStore.pieces.some(pieceOnList => pieceOnList.text === e.target.value)){
+         AppStore.pieceFieldError = 'You already have this piece in your piece list';
+    }
+    else{
+      AppStore.pieceFieldError = undefined;
+    }
+  }
 
   return (
    <div>     
@@ -91,7 +99,7 @@ const PieceListContainer = observer(() => {
              || "Piece List"} </Typography>
 
        
-          <form onSubmit={addPiece} className={classes.form} noValidate>
+          <form onSubmit={addPiece} className={classes.form} >
             <TextField
               variant="outlined"
               margin="normal"
@@ -100,6 +108,7 @@ const PieceListContainer = observer(() => {
               label="Piece Name"
               name="pieceName"
               autoFocus
+              onChange={checkText}
               inputRef={textInput}
               helperText={AppStore.pieceFieldError}
             />
@@ -108,6 +117,7 @@ const PieceListContainer = observer(() => {
              variant="outlined"
              fullWidth
              color="primary"
+             disabled={!isText}
             >
             ADD
             </Button>
