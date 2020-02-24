@@ -38,7 +38,8 @@ class AppStore {
 
 
   choose = p => {
-    this.currentListId = p;
+    localStorage.setItem("currentListId", p);
+     this.currentListId = p;
   }
 
 
