@@ -25,6 +25,7 @@ const SelectDialog = observer(() => {
   
   const handleClose = () => {
     setOpen(false);
+    AppStore.exitSelection();
   };
 
   const pickNext = () => {
@@ -38,11 +39,7 @@ const SelectDialog = observer(() => {
     }
   
     }
-  //maybe this just should happpen in handleclose?
-  const exitDialog = () => {
-    setOpen(false);
-    AppStore.exitSelection();
-  }
+ 
 
   return (
     <div>
@@ -72,7 +69,7 @@ const SelectDialog = observer(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={exitDialog}>Exit</Button>
+          <Button onClick={handleClose}>Exit</Button>
           {!AppStore.selectionDone && <Button onClick={pickNext} color="primary">
             Next
           </Button> }
