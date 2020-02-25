@@ -29,11 +29,8 @@ const PieceList = observer(() => {
     AppStore.delete(e);
 
   };
-  // useEffect =() => {
-
-  // }
+ 
   const currentListId =  AppStore.currentListId || null;
-  // const piecesObject = ((AppStore.lists && currentListId) ? (toJS(AppStore.lists[currentListId] || {}).pieces) : toJS(AppStore.pieces)) || [];
   const piecesObject = (AppStore.lists && currentListId) && (toJS(AppStore.lists[currentListId] || {}).pieces);
   const pieces = piecesObject && Object.entries(piecesObject);
  

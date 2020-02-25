@@ -34,7 +34,7 @@ firebase.auth().onAuthStateChanged(user => {
               const piecesObject =
                 user.lists[currentListId] &&
                 toJS(user.lists[currentListId].pieces);
-             AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
+                AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
             }
           }
         });

@@ -38,12 +38,16 @@ const SelectDialog = observer(() => {
     }
   
     }
-
+  //maybe this just should happpen in handleclose?
+  const exitDialog = () => {
+    setOpen(false);
+    AppStore.exitSelection();
+  }
 
   return (
     <div>
     <Button
-    disabled= {AppStore.pieces.length <= 0}
+    disabled= {AppStore.pieces && AppStore.pieces.length <= 0}
     onClick = {handlePick}
     fullWidth
     variant="contained"
@@ -56,19 +60,22 @@ const SelectDialog = observer(() => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="select-dialog"
+        aria-describedby="dialog-to-randomly-select-pieces"
+        fullWidth
       >
-        <DialogTitle id="alert-dialog-title">{"Play"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Play</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           {AppStore.selectedOption ? AppStore.selectedOption.text : "no more pieces to select"}
+           {/* {AppStore.selectedOption ? AppStore.selectedOption.text : "no more pieces to select"} */}
+           {AppStore.selectedOption && AppStore.selectedOption.text }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={pickNext} color="primary">
+          <Button onClick={exitDialog}>Exit</Button>
+          {!AppStore.selectionDone && <Button onClick={pickNext} color="primary">
             Next
-          </Button>
+          </Button> }
         </DialogActions>
       </Dialog>
     </div>

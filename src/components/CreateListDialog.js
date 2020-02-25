@@ -45,7 +45,7 @@ const CreateListDialog = observer(() => {
   return (
     <div>
       <Button
-        disabled={AppStore.pieces.length <= 0}
+        disabled={AppStore.pieces && AppStore.pieces.length <= 0}
         onClick={handleOpen}
         size="medium"
       >

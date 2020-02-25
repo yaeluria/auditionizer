@@ -39,7 +39,7 @@ class AppStore {
 
   choose = p => {
     localStorage.setItem("currentListId", p);
-     this.currentListId = p;
+    this.currentListId = p;
   }
 
 
@@ -63,6 +63,10 @@ class AppStore {
     }
   }
 
+  exitSelection = () => {
+    this.selectionDone = false;
+    this.piecesToSelectFrom = [];
+  }
 }
 decorate(AppStore, {
   pieces: observable,
