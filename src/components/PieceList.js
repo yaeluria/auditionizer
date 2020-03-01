@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {toJS} from 'mobx';
 import List from "@material-ui/core/List";
@@ -10,7 +10,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Paper from "@material-ui/core/Paper";
 import { useAppStore } from "../useAppStore";
 import { observer } from "mobx-react-lite";
-import firebase from '../firebase';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,12 +24,12 @@ const PieceList = observer(() => {
   const classes = useStyles();
 
   const deletePiece = (e) => {
-    console.log(piecesObject);
     AppStore.delete(e);
-
   };
-
-  const pieces = AppStore.pieces;
+ 
+  const currentListId =  AppStore.currentListId || null;
+  const piecesObject = (AppStore.lists && currentListId) && (toJS(AppStore.lists[currentListId] || {}).pieces);
+  const pieces = piecesObject && Object.entries(piecesObject);
   
 
   return (

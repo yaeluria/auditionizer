@@ -35,8 +35,6 @@ const SelectDialog = observer(() => {
   const handlePick = () => {
     if(AppStore.pieces.length > 0){
       setOpen(true);
-      console.log("selecting");
-      console.log(AppStore.currentListId);
       AppStore.select();
     }
   
