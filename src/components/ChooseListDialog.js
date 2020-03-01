@@ -14,7 +14,7 @@ import {useAppStore} from '../useAppStore';
 import { makeStyles } from "@material-ui/core/styles";
 
 
-const CreateListDialog = observer(() => { 
+const ChooseListDialog = observer(() => { 
 const [open, setOpen] = React.useState(false);
 const AppStore = useAppStore();
   
@@ -89,4 +89,4 @@ const handleOpen = () => {
     </div>
   );
 })
-export default CreateListDialog;
+export default ChooseListDialog;

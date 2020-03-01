@@ -23,7 +23,7 @@ class AppStore {
   loggedIn = false;
   user = null;
   openLogin = false;
-  pieces = [];
+  pieces = []; //maybe pieces should be computed
 
 
 
@@ -40,6 +40,10 @@ class AppStore {
   choose = p => {
     localStorage.setItem("currentListId", p);
     this.currentListId = p;
+    const piecesObject =
+      this.lists[this.currentListId] &&
+      toJS(this.lists[this.currentListId].pieces);
+    this.pieces = piecesObject ? Object.values(piecesObject) : [];
   }
 
 

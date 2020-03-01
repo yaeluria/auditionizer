@@ -31,6 +31,7 @@ firebase.auth().onAuthStateChanged(user => {
             const user = snapshot.val();
             if (user && user.lists) {
               AppStore.lists = { ...user.lists };
+              //need to do this also when choosing lists
               const piecesObject =
                 user.lists[currentListId] &&
                 toJS(user.lists[currentListId].pieces);
