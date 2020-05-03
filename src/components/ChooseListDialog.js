@@ -8,6 +8,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Paper from '@material-ui/core/Paper';
 
 import {useAppStore} from '../useAppStore';
@@ -37,15 +40,23 @@ const classes = useStyles();
 const chooseList = e => {
     AppStore.choose(e);
     handleClose();
-
  } 
+const deleteList = e => {
+  console.log(toJS(AppStore.currentListId), "before delete")
+  AppStore.deleteList(e);
+  handleClose()
+  console.log("deleted list ", e, toJS(AppStore.currentListId));
+  console.log(toJS(AppStore.lists),"after delete")
+}
  
 const listsObject = toJS(AppStore.lists);
 
 for (const listId in listsObject) {
     listsObject[listId].id = listId;
   }
-const lists = listsObject && Object.values(listsObject);
+const AllLists = listsObject && Object.values(listsObject);
+// the lists, excluding list currently showing and in reverse order to show latest added first.
+const lists = (AllLists.filter(list => list.id !== AppStore.currentListId)).reverse();
 
 const handleOpen = () => {
       setOpen(true);
@@ -76,9 +87,17 @@ const handleOpen = () => {
                   key={list.id}
                   data-id={list.id}
                   divider={!lastItem}
-                  onClick={(e) => chooseList(list.id, e)}
+                  
                 >
-                  <ListItemText>{list.name}</ListItemText>
+                  <ListItemText onClick={(e) => chooseList(list.id, e)}>{list.name}</ListItemText>
+                  <ListItemIcon>
+                    <IconButton edge="end" aria-label="delete" onClick={e => {
+                      deleteList(list.id, e);
+                    }}>
+                      <DeleteIcon
+                      />
+                    </IconButton>
+                  </ListItemIcon>
                 </ListItem>
               );
             })}

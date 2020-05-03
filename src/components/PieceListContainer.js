@@ -1,10 +1,12 @@
-import React, { useRef, useState} from 'react';
+import React, { useRef, useState, useEffect} from 'react';
+import { observable, computed, toJS} from "mobx"
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
 import CreateListDialog from './CreateListDialog';
 import ChooseListDialog from './ChooseListDialog';
-
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +18,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import GetStarted from './GetStarted';
 
 
 import { useAppStore } from '../useAppStore';
@@ -45,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
- 
+
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -67,10 +70,23 @@ const useStyles = makeStyles(theme => ({
 
 const PieceListContainer = observer(() => {
   const AppStore = useAppStore();
+  // const listName = (AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
+  // || "No Name";
   const classes = useStyles();
   const [isText, setIsText] = useState(false);
+  const [name, setName] = useState();
 
   let textInput = useRef(null);
+
+  useEffect(() => {
+    console.log(toJS(AppStore), "from PieceListContainer")
+    // console.log(Object.keys(toJS(AppStore.lists)))
+    if
+    (AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name){
+      setName(AppStore.lists[AppStore.currentListId].name)
+      console.log("render");
+    }
+  },[AppStore.lists]);
 
   const addPiece = (evt) => {
     evt.preventDefault();
@@ -88,15 +104,37 @@ const PieceListContainer = observer(() => {
       AppStore.pieceFieldError = undefined;
     }
   }
+  
+  const deleteList = p => {
+    AppStore.deleteList(p);
+    if(AppStore.lists){
+      //targets last key in AppStore.lists, which is latest added list
+      const nextList = (Object.keys(toJS(AppStore.lists))).slice(-1)[0];
+      localStorage.setItem("currentListId", nextList);
+      AppStore.currentListId = nextList;
+    }
+  
 
+  }
+
+  
   return (
+    (AppStore.lists && AppStore.lists[AppStore.currentListId])?
    <div>     
     <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component="h1" variant="h5"> 
            {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
-             || "Piece List"} </Typography>
+             || "No Name"}
+             <IconButton edge="end" aria-label="delete" onClick={e => {
+                      
+                      deleteList(AppStore.currentListId);
+                    }}>
+                      <DeleteIcon
+                      />
+                    </IconButton>
+              </Typography>
 
        
           <form onSubmit={addPiece} className={classes.form} >
@@ -122,21 +160,17 @@ const PieceListContainer = observer(() => {
             ADD
             </Button>
            <PieceList />
-          
-            <FormControlLabel
-              control={<Checkbox value="autoStop" color="primary" />}
-              label="Let me know when I should move on to the next piece"
-            />
-       
             <SelectDialog />
               <Grid container>
-              <Grid item xs>
+              <Grid>
                  <CreateListDialog />
         
               </Grid>
-              <Grid item>
+              { Object.keys(toJS(AppStore.lists)).length > 1 &&
+                <Grid >
                 <ChooseListDialog />
                 </Grid>
+              }
             </Grid>
           </form>
         </div>
@@ -145,6 +179,8 @@ const PieceListContainer = observer(() => {
         </Box>
       </Container>
       </div>
+     :
+      <GetStarted />
       
    
   );

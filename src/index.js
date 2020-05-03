@@ -26,18 +26,35 @@ firebase.auth().onAuthStateChanged(user => {
       firebase
         .database()
         .ref("users/" + userId)
+        //when does this happen?
         .on("value", snapshot => {
+          //what if there is no snapshot?
           if (snapshot && snapshot.exists()) {
             const user = snapshot.val();
             if (user && user.lists) {
               AppStore.lists = { ...user.lists };
+              const currentList = user.lists[currentListId] 
               const piecesObject =
-                user.lists[currentListId] &&
-                toJS(user.lists[currentListId].pieces);
+                currentList &&
+                toJS(currentList.pieces);
                 AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
-            }
+                // (AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
+                // AppStore.listName = currentList.name;
+
+            } 
+          }
+          else{
+            AppStore.lists = undefined;
           }
         });
+        // firebase
+        // .database()
+        // .ref("users/" + userId )
+        // .on('child_added', function(data) {
+        //   // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+        //   console.log(data.key);
+        //   AppStore.currentListId = data.key;
+        // });
     }
 
     const checkForCurrentId = (callback) => {
@@ -49,35 +66,36 @@ firebase.auth().onAuthStateChanged(user => {
             const user = snapshot.val();
             if (user && user.lists) {
               AppStore.lists = { ...user.lists };
-
+              console.log("there are lists in the database")
             }
-
             else {
-              AppStore.lists = {};
+              AppStore.lists = undefined;
             }
             const localCurrentListId = localStorage.getItem("currentListId");
 
+            console.log("from index", toJS(AppStore.lists), localCurrentListId);
 
             currentListId =
-              (toJS(AppStore.lists).hasOwnProperty(localCurrentListId) &&
+              ( AppStore.lists &&
+                toJS(AppStore.lists).hasOwnProperty(localCurrentListId) &&
                 localCurrentListId) ||
-              null;
+              undefined;
             AppStore.currentListId = currentListId;
-            if (!AppStore.currentListId) {
-              const listsRef = firebase.database().ref('users/' + userId + '/lists');
+            // if (!AppStore.currentListId) {
+            //   const listsRef = firebase.database().ref('users/' + userId + '/lists');
 
-              // first make sure user doesn't have a list called piece list- and handle error if does.
-              listsRef.push(
-                {
-                  "name": "Piece List",
-                }
-              ).then((snap) => {
-                currentListId = snap.key;
-                localStorage.setItem("currentListId", currentListId)
-                console.log(currentListId);
+            //   // first make sure user doesn't have a list called piece list- and handle error if does.
+            //   listsRef.push(
+            //     {
+            //       "name": "Piece List",
+            //     }
+            //   ).then((snap) => {
+            //     currentListId = snap.key;
+            //     localStorage.setItem("currentListId", currentListId)
+            //     console.log(currentListId);
 
-              })
-            }
+            //   })
+            // }
 
             callback(currentListId);
           }

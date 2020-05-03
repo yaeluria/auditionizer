@@ -5,7 +5,6 @@ import PieceListContainer from './PieceListContainer';
 import NotLoggedInScreen from './NotLoggedInScreen';
 import SelectDialog from './SelectDialog';
 import SignInDialog from './SignInDialog';
-import LoginTooltip from './LoginTooltip';
 import CreateListDialog from './CreateListDialog';
 import ChooseListDialog from './ChooseListDialog';
 
