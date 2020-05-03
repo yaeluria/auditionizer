@@ -75,6 +75,7 @@ const PieceListContainer = observer(() => {
   const classes = useStyles();
   const [isText, setIsText] = useState(false);
   const [name, setName] = useState();
+  const moreThanOneList = Object.keys(toJS(AppStore.lists)).length > 1;
 
   let textInput = useRef(null);
 
@@ -137,42 +138,37 @@ const PieceListContainer = observer(() => {
               </Typography>
 
        
-          <form onSubmit={addPiece} className={classes.form} >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="pieceName"
-              label="Piece Name"
-              name="pieceName"
-              autoFocus
-              onChange={checkText}
-              inputRef={textInput}
-              helperText={AppStore.pieceFieldError}
-            />
-            <Button
-             type="submit"
-             variant="outlined"
-             fullWidth
-             color="primary"
-             disabled={!isText}
-            >
-            ADD
+            <form onSubmit={addPiece} className={classes.form} >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="pieceName"
+                label="Piece Name"
+                name="pieceName"
+                autoFocus
+                onChange={checkText}
+                inputRef={textInput}
+                helperText={AppStore.pieceFieldError}
+              />
+              <Button
+                type="submit"
+                variant="outlined"
+                fullWidth
+                color="primary"
+                disabled={!isText}
+              >
+                ADD
             </Button>
-           <PieceList />
-            <SelectDialog />
-              <Grid container>
-              <Grid>
-                 <CreateListDialog />
-        
-              </Grid>
-              { Object.keys(toJS(AppStore.lists)).length > 1 &&
-                <Grid >
-                <ChooseListDialog />
-                </Grid>
-              }
-            </Grid>
-          </form>
+              <PieceList />
+              <SelectDialog />
+              <Box display="flex" justifyContent={moreThanOneList ? "space-between" : "center"} >
+                <CreateListDialog />
+                {moreThanOneList &&
+                  <ChooseListDialog />
+                }
+              </Box>
+            </form>
         </div>
         <Box mt={8}>
           <Copyright />
