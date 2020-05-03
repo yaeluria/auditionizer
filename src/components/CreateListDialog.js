@@ -75,14 +75,11 @@ const createList = e => {
   </Button>
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="create-list-title">
-      <form onSubmit={e=>createList(e)}>
-
         <DialogTitle id="create-list-title">Create a new list for your audition pieces</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please give this list a title (e.g. Berlin Philharmonic Audition December 2020).
           </DialogContentText>
-         
           <TextField
             autoFocus
             margin="dense"
@@ -94,15 +91,13 @@ const createList = e => {
           />
         </DialogContent>
         <DialogActions>
-        <ButtonBase type="submit">
-          <Button disabled={!listName}
-          //  onClick={createList}
+          <Button 
+          onClick={e=>createList(e)}
+          disabled={!listName}
             color="primary">
             Create
           </Button>
-          </ButtonBase>
         </DialogActions>
-        </form>
       </Dialog>
     </div>
   );
