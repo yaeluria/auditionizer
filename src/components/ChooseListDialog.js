@@ -44,9 +44,6 @@ const chooseList = e => {
 const deleteList = e => {
   console.log(toJS(AppStore.currentListId), "before delete")
   AppStore.deleteList(e);
-  handleClose()
-  console.log("deleted list ", e, toJS(AppStore.currentListId));
-  console.log(toJS(AppStore.lists),"after delete")
 }
  
 const listsObject = toJS(AppStore.lists);
