@@ -61,8 +61,6 @@ const afterList = () => {
   handleClose();
 }
 const createList = e => {
-  e.preventDefault();
-  console.log(AppStore ,"before");
   AppStore.createList(listName, afterList);
 }
   return (
