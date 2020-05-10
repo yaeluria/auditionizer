@@ -75,7 +75,7 @@ const PieceListContainer = observer(() => {
   const classes = useStyles();
   const [isText, setIsText] = useState(false);
   const [name, setName] = useState();
-  const moreThanOneList = Object.keys(toJS(AppStore.lists)).length > 1;
+  const moreThanOneList = AppStore.lists && Object.keys(toJS(AppStore.lists)).length > 1;
 
   let textInput = useRef(null);
 
