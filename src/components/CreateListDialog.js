@@ -11,58 +11,59 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
 import { useAppStore } from '../useAppStore';
 
 
 const CreateListDialog = observer(() => {
-  const [listName, setListName] = useState()
-  const AppStore = useAppStore();
-  // const areLists = () => !AppStore.lists;
-  // const [open, setOpen] = React.useState(() => areLists());
+  const [listName, setListName] = useState();
+  const [createDisabled, setCreateDisabled] = useState(true);
+  const [nameError, setNameError] = useState();
   const [open, setOpen] = React.useState(false);
+
+  const AppStore = useAppStore();
+  
   const handleClose = () => {
    setOpen(false);
   };
-  // useEffect(() => {
-  //   console.log("render creat list")
-  //   if (!AppStore.lists){
-  //     setOpen(true)
-  //   }
-  // }, [AppStore.lists]);
   
   const handleOpen = () => {
     setOpen(true);
   }
   const setName = e => {
-    setListName(e.target.value);
+    if (e.target.value && e.target.value.length > 0) {
+      if (checkName(e.target.value)) {
+        setNameError();
+        setCreateDisabled(false);
+        setListName(e.target.value)
+      } else {
+        setCreateDisabled(true);
+        setNameError("You already have a list with the same name.")
+      }
+    } else {
+      setCreateDisabled(true);
+    }
   }
 
-  // const createList = () => {
-  //   const userId = AppStore.user.uid;
-  //   const listsRef = firebase.database().ref('users/' + userId + '/lists');
-  //   listsRef.push(
-  //     {
-  //       "name": listName,
-  //     }
-  //   ).then((snap) => {
-  //     const currentListId = snap.key;
-  //     localStorage.setItem("currentListId", currentListId)
-  //     //sets list name to undefined for next time the dialog opens
-  //     setListName();
-  //     handleClose();
-  //   })
-  // }
-const afterList = () => {
-  console.log(toJS(AppStore), "after");
-  setListName();
-  handleClose();
-}
-const createList = e => {
-  AppStore.createList(listName, afterList);
-}
+  const checkName = n => {
+    const listsObject = toJS(AppStore.lists);
+    const listNamesArray = []
+    for (const list in listsObject) {
+      listNamesArray.push(listsObject[list].name);
+    }
+    if (listNamesArray.includes(n)) {
+      return false;
+    }
+    else return true;
+  }
+
+  const afterList = () => {
+    setListName();
+    handleClose();
+  }
+  const createList = e => {
+    AppStore.createList(listName, afterList);
+  }
   return (
     <div>
       <Button
@@ -86,12 +87,13 @@ const createList = e => {
             type="text"
             fullWidth
             onChange={setName}
+            helperText={nameError}
           />
         </DialogContent>
         <DialogActions>
           <Button 
           onClick={e=>createList(e)}
-          disabled={!listName}
+          disabled={createDisabled}
             color="primary">
             Create
           </Button>
