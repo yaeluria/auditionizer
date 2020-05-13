@@ -44,7 +44,7 @@ const SelectDialog = observer(() => {
   return (
     <div>
     <Button
-    disabled= {AppStore.pieces && AppStore.pieces.length <= 0}
+    disabled= {AppStore.pieces && AppStore.pieces.length <= 0} //maybe should be 1?
     onClick = {handlePick}
     fullWidth
     variant="contained"

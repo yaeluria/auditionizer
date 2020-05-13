@@ -23,7 +23,7 @@ const PieceList = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
 
-  const deletePiece = (e) => {
+  const deletePiece = e => {
     AppStore.delete(e);
   };
  

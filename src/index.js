@@ -31,11 +31,6 @@ firebase.auth().onAuthStateChanged(user => {
             const user = snapshot.val();
             if (user && user.lists) {
               AppStore.lists = { ...user.lists };
-              const currentList = user.lists[currentListId] 
-              const piecesObject =
-                currentList &&
-                toJS(currentList.pieces);
-                AppStore.pieces = piecesObject ? Object.values(piecesObject) : [];
             } 
           }
         else{

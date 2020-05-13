@@ -1,4 +1,4 @@
-import { observe, observable, action, decorate, toJS, computed } from 'mobx';
+import { observable, action, decorate, toJS, computed } from 'mobx';
 import firebase from './firebase';
 import App from './App';
 
@@ -10,7 +10,6 @@ export class Piece {
   }
 }
 // const localCurrentListId = localStorage.getItem("currentListId")
-
 
 class AppStore {
 
@@ -26,32 +25,23 @@ class AppStore {
   loggedIn = false;
   user = null;
   openLogin = false;
-  pieces = []; //maybe pieces should be computed
-  listName;
-
-
+  pieceEntry;
+  
+  
   add = piece => {
-    if (piece && this.pieceFieldError === undefined) {
-      console.log(toJS(this.lists));
       const userId = this.user.uid;
       const currentListRef = this.currentListId && firebase.database().ref('users/' + userId + '/lists/' + this.currentListId + "/pieces");
       currentListRef.push(new Piece(piece))
-    }
   };
 
 
   choose = p => {
     localStorage.setItem("currentListId", p);
     this.currentListId = p;
-    const piecesObject =
-      this.lists[this.currentListId] &&
-      toJS(this.lists[this.currentListId].pieces);
-    this.pieces = piecesObject ? Object.values(piecesObject) : [];
+    this.pieceFieldError = '';
     this.listName =  this.lists[this.currentListId] && toJS(this.lists[this.currentListId].name);
   }
   
-
-
   createList = (name, afterFunc) => {
     const listsRef = firebase.database().ref('users/' + this.user.uid + '/lists');
     listsRef.push(
@@ -59,28 +49,32 @@ class AppStore {
         "name": name,
       }
     ).then((snap) => {
-      console.log(1);
       const currentListId = snap.key;
-      console.log(currentListId);
       localStorage.setItem("currentListId", currentListId);
       this.currentListId = currentListId; 
-      console.log(this.currentListId);
+      this.pieceFieldError = '';
       afterFunc();     
   })
-  // .then((currentListId) => {
-  //     // AppStore.currentListId = currentListId;
-
-  //     afterFunc();
-  //     console.log(2);
-  //     console.log(currentListId);
-  // })
 }
-  
+
+get pieces() {
+  const piecesObject =
+      this.lists[this.currentListId] &&
+      toJS(this.lists[this.currentListId].pieces);
+      return piecesObject ? Object.values(piecesObject) : [];
+   
+}
   
   delete = p => {
     const userId = this.user.uid;
+    if (this.pieceFieldError){
+      if(this.pieceEntry === p[1].text){
+        this.pieceFieldError = "";
+      }
+    }
     const pieceToDeleteRef = firebase.database().ref('users/' + userId + '/lists/' + this.currentListId + "/pieces/" + p[0]);
     pieceToDeleteRef.remove();
+    
   };
 
   deleteList = p => {
@@ -109,13 +103,12 @@ class AppStore {
   }
 
 //   get listName() {
-//     return this.list && this.lists[AppStore.currentListId] && this.lists[this.currentListId].name;
+//     return this.lists && this.lists[AppStore.currentListId] && this.lists[this.currentListId].name;
 // }
-  // AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
-  // || "No Name"
+
 }
 decorate(AppStore, {
-  pieces: observable,
+  pieces: computed,
   add: action,
   selectedOption: observable,
   delete: action,
@@ -129,9 +122,9 @@ decorate(AppStore, {
   loggedIn: observable,
   user: observable,
   openLogin: observable,
-  listName: observable,
   createList: action,
-  localCurrentListId: observable
+  localCurrentListId: observable,
+  pieceEntry: observable
 });
 decorate(Piece, {
   text: observable,

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect} from 'react';
-import { observable, computed, toJS} from "mobx"
+import { toJS } from "mobx"
 import { observer } from 'mobx-react-lite';
 import PieceList from './PieceList';
 import SelectDialog from './SelectDialog';
@@ -10,17 +10,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import GetStarted from './GetStarted';
-
-
 import { useAppStore } from '../useAppStore';
 
 function Copyright() {
@@ -70,42 +65,48 @@ const useStyles = makeStyles(theme => ({
 
 const PieceListContainer = observer(() => {
   const AppStore = useAppStore();
-  // const listName = (AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
-  // || "No Name";
   const classes = useStyles();
-  const [isText, setIsText] = useState(false);
-  const [name, setName] = useState();
+  const [disabled, setDisabled] = useState(true);
+
   const moreThanOneList = AppStore.lists && Object.keys(toJS(AppStore.lists)).length > 1;
+  const textInput = useRef();
 
-  let textInput = useRef(null);
-
-  useEffect(() => {
-    console.log(toJS(AppStore), "from PieceListContainer")
-    // console.log(Object.keys(toJS(AppStore.lists)))
-    if
-    (AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name){
-      setName(AppStore.lists[AppStore.currentListId].name)
-      console.log("render");
+  useEffect(()=>{
+    console.log(disabled);
+    if((textInput.current && textInput.current.value.length > 0)  && !AppStore.pieceFieldError){
+      setDisabled(false);
     }
-  },[AppStore.lists]);
+  })
+  //todo - can this function be rewritten in more efficient code?
+  const checkText = e => {
+    AppStore.pieceEntry = e.target.value;
+    if (e.target.value && e.target.value.length > 0) {
+      if (checkNotIncludes(e)) {
+        setDisabled(false);
+        AppStore.pieceFieldError = ""
+      } else {
+        setDisabled(true);
+        AppStore.pieceFieldError = "You already have a piece on this list with the same name.";
+        textInput.current.select();
+      }
+    } else {
+      setDisabled(true);
+      AppStore.pieceFieldError = "";
+    }
+
+  }
 
   const addPiece = (evt) => {
     evt.preventDefault();
     AppStore.add(textInput.current.value);
-    if(!AppStore.pieceFieldError){
-        textInput.current.value = '';
-      }
+    textInput.current.value = '';
+    textInput.current.focus();
+    setDisabled(true);
   };
-  const checkText = e => {
-    e.target.value? setIsText(true) : setIsText(false);
-    if(AppStore.pieces && AppStore.pieces.some(pieceOnList => pieceOnList.text === e.target.value)){
-         AppStore.pieceFieldError = 'You already have this piece in your piece list';
-    }
-    else{
-      AppStore.pieceFieldError = undefined;
-    }
+  const checkNotIncludes = e =>{
+    return AppStore.pieces && AppStore.pieces.some(pieceOnList => pieceOnList.text === e.target.value) ? false : true;
   }
-  
+ 
   const deleteList = p => {
     AppStore.deleteList(p);
     if(AppStore.lists){
@@ -113,9 +114,8 @@ const PieceListContainer = observer(() => {
       const nextList = (Object.keys(toJS(AppStore.lists))).slice(-1)[0];
       localStorage.setItem("currentListId", nextList);
       AppStore.currentListId = nextList;
+      AppStore.pieceFieldError = '';
     }
-  
-
   }
 
   
@@ -129,7 +129,6 @@ const PieceListContainer = observer(() => {
            {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
              || "No Name"}
              <IconButton edge="end" aria-label="delete" onClick={e => {
-                      
                       deleteList(AppStore.currentListId);
                     }}>
                       <DeleteIcon
@@ -150,13 +149,15 @@ const PieceListContainer = observer(() => {
                 onChange={checkText}
                 inputRef={textInput}
                 helperText={AppStore.pieceFieldError}
+                autoFocus
+                key={AppStore.currentListId}
               />
               <Button
                 type="submit"
                 variant="outlined"
                 fullWidth
                 color="primary"
-                disabled={!isText}
+                disabled={disabled}
               >
                 ADD
             </Button>

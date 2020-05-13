@@ -25,6 +25,7 @@ const CreateListDialog = observer(() => {
   
   const handleClose = () => {
    setOpen(false);
+   setNameError("");
   };
   
   const handleOpen = () => {
@@ -42,6 +43,7 @@ const CreateListDialog = observer(() => {
       }
     } else {
       setCreateDisabled(true);
+      setNameError("");
     }
   }
 
