@@ -8,9 +8,7 @@ import ChooseListDialog from './ChooseListDialog';
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,26 +16,8 @@ import Container from '@material-ui/core/Container';
 import GetStarted from './GetStarted';
 import { useAppStore } from '../useAppStore';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-       Yael Luria
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
+  centered: {
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
@@ -48,19 +28,15 @@ const useStyles = makeStyles(theme => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
+  content:{
+    flex: '1 0 auto',
+    padding: '10px'
   },
-  
-  toolbar: {
-    flexWrap: 'wrap',
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
   },
-  toolbarTitle: {
-    flexGrow: 1,
-  },
-  login:{
-    margin: theme.spacing(1, 1.5),
-  }
 }));
 
 const PieceListContainer = observer(() => {
@@ -121,10 +97,9 @@ const PieceListContainer = observer(() => {
   
   return (
     (AppStore.lists && AppStore.lists[AppStore.currentListId])?
-   <div>     
-    <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
+   <div className={classes.root}>     
+          <Container maxWidth="xs" className="content" >
+          <div className={classes.centered}>
           <Typography component="h1" variant="h5"> 
            {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
              || "No Name"}
@@ -170,12 +145,9 @@ const PieceListContainer = observer(() => {
                 }
               </Box>
             </form>
-        </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
-      </Container>
-      </div>
+            </div>
+            </ Container>
+            </div>
      :
       <GetStarted />
       
