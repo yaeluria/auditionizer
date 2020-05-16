@@ -17,25 +17,17 @@ import GetStarted from './GetStarted';
 import { useAppStore } from '../useAppStore';
 
 const useStyles = makeStyles(theme => ({
+  root:{
+    height: 'inherit'
+  },
   centered: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
-  },
-  content:{
-    flex: '1 0 auto',
-    padding: '10px'
-  },
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
   },
 }));
 
@@ -98,7 +90,7 @@ const PieceListContainer = observer(() => {
   return (
     (AppStore.lists && AppStore.lists[AppStore.currentListId])?
    <div className={classes.root}>     
-          <Container maxWidth="xs" className="content" >
+          <Container maxWidth="xs" >
           <div className={classes.centered}>
           <Typography component="h1" variant="h5"> 
            {(AppStore.lists && AppStore.lists[AppStore.currentListId] && AppStore.lists[AppStore.currentListId].name)
@@ -110,8 +102,6 @@ const PieceListContainer = observer(() => {
                       />
                     </IconButton>
               </Typography>
-
-       
             <form onSubmit={addPiece} className={classes.form} >
               <TextField
                 variant="outlined"
@@ -146,7 +136,7 @@ const PieceListContainer = observer(() => {
               </Box>
             </form>
             </div>
-            </ Container>
+            </Container>
             </div>
      :
       <GetStarted />
