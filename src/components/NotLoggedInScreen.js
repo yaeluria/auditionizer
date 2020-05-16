@@ -1,20 +1,5 @@
-// import React from 'react';
-// import SignInDialog from './SignInDialog';
-
-
-// export default function NotLoggedInScreen() {
-//     return (
-//             <div>
-//                <h1>Log in to use Auditionizer</h1>
-//                {/* <SignInDialog /> */}
-//             </div>
-//       )
-//     }
-
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import { makeStyles } from '@material-ui/core/styles';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from '../firebase';
@@ -62,15 +47,11 @@ const NotLoggedInScreen = observer(() => {
           <p>Your Audition Jury in the practice room.</p>
           <p>Sign in to get started</p>
           </Typography>
-          
-          
           <StyledFirebaseAuth
             uiConfig={uiConfig}
             firebaseAuth={firebase.auth()}
          />
         </Container>
-     
-        
           </div>
    );
 })
