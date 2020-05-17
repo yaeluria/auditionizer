@@ -33,24 +33,7 @@ const useStyles = makeStyles(theme => ({
     flexShrink: 0,
   }
 }));
-// const headerHeight = '7vh';
-// const pageContentHeight = '86vh';
-// const footerHeight = '7vh';
 
-// <Box height={headerHeight} display="flex">
-// <Header />
-// </Box>
-// <Box height={pageContentHeight} className={classes.pageContent}>
-// <Switch>
-//   <Route exact path="/" component={HomePage} />
-//   <Route path="/newsflash/:id" component={HomePage} />
-//   <Route path="/about" component={AboutPage} />
-//   <Route path="/thank-you" component={ThankYouPage} />
-// </Switch>
-// </Box>
-// <Box height={footerHeight} display="flex">
-// <Footer />
-// </Box> 
 const App = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
@@ -75,17 +58,9 @@ const App = observer(() => {
           } 
         </Box>
     </Box>
-    {/* <Box minHeight={headerHeight} display="flex"> */}
-        
-       {/* </Box> */}
-       {/* <Box height={pageContentHeight} className={classes.pageContent}> */}
-       
-        {/* </Box>  */}
-      {/* <Box height={footerHeight} display="flex" flexDirection="column" alignItems="center"> */}
         <footer className="classes.footer">
           <Footer />
         </footer>
-      {/* </Box> */}
       </Box>
   );
 })
