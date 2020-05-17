@@ -2,14 +2,13 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceListContainer from './components/PieceListContainer';
 import NotLoggedInScreen from './components/NotLoggedInScreen';
-import SignInDialog from './components/SignInDialog';
+import SignOutButton from './components/SignOutButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Footer from './components/Footer';
 import { useAppStore } from './useAppStore';
 
@@ -48,7 +47,7 @@ const App = observer(() => {
               AUDITIONIZER
             </Typography>
             </Box>
-            <SignInDialog />
+            <SignOutButton />
           </Toolbar>
         </AppBar>
         <Box pt={8}>
