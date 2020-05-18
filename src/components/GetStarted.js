@@ -6,7 +6,8 @@ import CreateListDialog from './CreateListDialog'
 
 const useStyles = makeStyles(() => ({
     root: {
-        height: 'inherit'
+        height: 'inherit',
+        paddingTop: '16px'
     },
   }));
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles(() => ({
             Ready for your next Audition?
           </Typography>
           <Typography variant="h5" component="h2" gutterBottom>
-            Make it perfect. Add a list to get started
+            Make it perfect. Create a list to get started
           </Typography>
           <CreateListDialog />
         </Container>

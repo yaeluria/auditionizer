@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 
 function Footer() {
     return (
-        <Box marginBottom={2}>
+        <Box pt={1} pb={1} >
            <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
             <Link color="inherit" href="https://yaeluria.github.io/">

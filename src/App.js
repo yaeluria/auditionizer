@@ -50,7 +50,7 @@ const App = observer(() => {
             <SignOutButton />
           </Toolbar>
         </AppBar>
-        <Box pt={8}>
+        <Box>
         {AppStore.loggedIn ?
             <PieceListContainer /> :
             <NotLoggedInScreen />

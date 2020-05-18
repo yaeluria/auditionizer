@@ -18,7 +18,8 @@ import { useAppStore } from '../useAppStore';
 
 const useStyles = makeStyles(theme => ({
   root:{
-    height: 'inherit'
+    paddingTop: '16px',
+    height: 'inherit',
   },
   centered: {
     display: 'flex',

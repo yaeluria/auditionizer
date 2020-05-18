@@ -7,19 +7,47 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container'
 import { useAppStore } from '../useAppStore';
 
+
 const useStyles = makeStyles((theme) => ({
+   //todo - write variables instead of px in height calc - footer height is always 36 (for now).
+   // Header height changes according to breakpoints.
    root: {
-   //   display: 'flex',
-   //   flexDirection: 'column',
-   //   minHeight: '100vh',
-   height: 'inherit'
-   },
-   main: {
-   //   marginTop: theme.spacing(8),
-   //   marginBottom: theme.spacing(2),
-   },
+      display: 'flex',
+      flexDirection: 'column',
+      height: 'calc(100vh - 92px)',
+      color: '#FFF5EE',
+      backgroundImage:  'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),url(https://source.unsplash.com/Kx4Mm3ZnZBc)',
+      backgroundPosition: "center center",
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      [theme.breakpoints.up('sm')]: {
+         height: 'calc(100vh - 100px)'
+       },
+       [`${theme.breakpoints.down('xs')} and (orientation: landscape)`]: {
+         height: 'calc(100vh - 84px)'
+       },
+    },
+    main: {
+       paddingTop: '100px',
+       textAlign: 'center'
+    }
  }));
 
+// @media (min-width: 600px)
+//  <style>
+//  .MuiToolbar-regular {
+//      min-height: 64px;
+//  }
+ 
+//  @media (min-width: 0px) and (orientation: landscape)
+//  <style>
+//  .MuiToolbar-regular {
+//      min-height: 48px;
+//  }
+//  <style>
+//  .MuiToolbar-regular {
+//      min-height: 56px;
+//  }
 const NotLoggedInScreen = observer(() => {
 
 
@@ -38,15 +66,15 @@ const NotLoggedInScreen = observer(() => {
 
    return (
         <div className={classes.root}>
-        {/* <CssBaseline /> */}
         <Container component="main" className={classes.main} maxWidth="sm">
-          <Typography variant="h2" component="h1" gutterBottom>
-           Auditionizer
+          <Typography variant="h5" component="h1" gutterBottom>
+           Your Audition Jury in the Practice Room
           </Typography>
-         
-          <Typography variant="h5" component="h2" gutterBottom>
-          <p>Your Audition Jury in the practice room.</p>
-          <p>Sign in to get started</p>
+          <Typography variant="subtitle1" component="h2" gutterBottom>
+          Auditionizer helps you prepare for auditions by keeping track 
+          of your list of pieces for each audition and
+          simulates the audition process by randomly choosing the pieces for you to play. 
+          Sign in to get started.
           </Typography>
           <StyledFirebaseAuth
             uiConfig={uiConfig}

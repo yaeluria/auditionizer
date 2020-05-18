@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import firebase from '../firebase';
 import {toJS} from 'mobx';
 import { observer } from 'mobx-react-lite';
-
 import Button from '@material-ui/core/Button'
-import ButtonBase from '@material-ui/core/ButtonBase'
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
