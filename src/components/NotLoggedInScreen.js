@@ -5,8 +5,6 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from '../firebase';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container'
-import { useAppStore } from '../useAppStore';
-
 
 const useStyles = makeStyles((theme) => ({
    //todo - write variables instead of px in height calc - footer height is always 36 (for now).
