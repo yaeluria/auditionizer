@@ -18,10 +18,9 @@ const SignOutButton = observer(() => {
      {
        AppStore.loggedIn &&
        <Button
-        fullWidth
         variant="contained"
         color="primary"
-        size="large"
+        size="small"
         onClick = {signOut}
         >
         Sign out
