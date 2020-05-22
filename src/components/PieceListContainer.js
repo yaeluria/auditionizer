@@ -41,11 +41,11 @@ const PieceListContainer = observer(() => {
   const textInput = useRef();
 
   useEffect(()=>{
-    console.log(disabled);
     if((textInput.current && textInput.current.value.length > 0)  && !AppStore.pieceFieldError){
       setDisabled(false);
     }
-  })
+  },[AppStore.pieceFieldError]);
+ 
   //todo - can this function be rewritten in more efficient code?
   const checkText = e => {
     AppStore.pieceEntry = e.target.value;
@@ -115,7 +115,6 @@ const PieceListContainer = observer(() => {
                 onChange={checkText}
                 inputRef={textInput}
                 helperText={AppStore.pieceFieldError}
-                autoFocus
                 key={AppStore.currentListId}
               />
               <Button

@@ -49,9 +49,6 @@ const useStyles = makeStyles((theme) => ({
 //      min-height: 56px;
 //  }
 const NotLoggedInScreen = observer(() => {
-
-
-   const AppStore = useAppStore();
    const uiConfig = {
       signInFlow: 'popup',
       signInOptions: [

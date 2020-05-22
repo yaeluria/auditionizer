@@ -1,6 +1,5 @@
 import { observable, action, decorate, toJS, computed } from 'mobx';
 import firebase from './firebase';
-import App from './App';
 
 export class Piece {
   text = '';
@@ -9,7 +8,6 @@ export class Piece {
     this.text = text;
   }
 }
-// const localCurrentListId = localStorage.getItem("currentListId")
 
 class AppStore {
 
@@ -20,7 +18,6 @@ class AppStore {
   selectedOption;
   selectionDone;
   lists = {};
-  // currentListId;
   currentListId = (this.lists.hasOwnProperty(this.localCurrentListId) && this.localCurrentListId) || undefined;
   loggedIn = false;
   user = null;
