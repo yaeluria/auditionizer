@@ -1,14 +1,22 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container'
-import CreateListDialog from './CreateListDialog'
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import CreateList from './CreateList';
+import music from '../assets/music.svg'; 
 
 const useStyles = makeStyles(() => ({
     root: {
         height: 'inherit',
-        paddingTop: '16px'
+        paddingTop: '36px',
+       
     },
+    illustration: {
+      height: '25vh',
+      marginBottom: '36px'
+    }
+    
   }));
 
   export default function GetStarted() {
@@ -16,14 +24,16 @@ const useStyles = makeStyles(() => ({
   
     return (
       <div className={classes.root}>
-        <Container component="main" className={classes.main} maxWidth="sm">
-          <Typography variant="h2" component="h1" gutterBottom>
-            Ready for your next Audition?
+        <Container component="main" className={classes.main} maxWidth="sm" >
+        <img className={classes.illustration} src={music} alt="Music illustration" /> 
+        <Box>
+          <Typography variant="h4"  component="h1" gutterBottom>
+            <Box fontWeight={600}  fontFamily="Open Sans" >
+              Get ready for your next Audition
+            </Box>
           </Typography>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Make it perfect. Create a list to get started
-          </Typography>
-          <CreateListDialog />
+          <CreateList />
+        </Box>
         </Container>
       </div>
     );
