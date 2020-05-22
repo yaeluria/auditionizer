@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {toJS} from 'mobx';
 import { observer } from 'mobx-react-lite';
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { useAppStore } from '../useAppStore';
@@ -18,7 +17,6 @@ const CreateListDialog = observer(() => {
   const [open, setOpen] = React.useState(false);
 
   const AppStore = useAppStore();
-  
   const handleClose = () => {
    setOpen(false);
    setNameError("");
@@ -72,11 +70,8 @@ const CreateListDialog = observer(() => {
   </Button>
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="create-list-title">
-        <DialogTitle id="create-list-title">Create a new list for your audition pieces</DialogTitle>
+        <DialogTitle id="create-list-title">Add a new list of audition pieces</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please give this list a title (e.g. Berlin Philharmonic Audition December 2020).
-          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
@@ -89,7 +84,8 @@ const CreateListDialog = observer(() => {
           />
         </DialogContent>
         <DialogActions>
-          <Button 
+          <Button
+          //todo - is "e" ncessary? 
           onClick={e=>createList(e)}
           disabled={createDisabled}
             color="primary">
