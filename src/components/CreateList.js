@@ -53,7 +53,7 @@ const CreateList = observer(() => {
   }
   return (
     <Box height="inherit" display="flex" flexDirection="column" alignContent="spaceEvenly">
-        <Typography>
+        <Typography component="div">
             <Box lineHeight='1.60' >
             Create a list of your audition pieces.
             Give this list a title (e.g. Berlin Philharmonic Audition December 2020).
