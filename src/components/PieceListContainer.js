@@ -82,7 +82,7 @@ const PieceListContainer = observer(() => {
       //targets last key in AppStore.lists, which is latest added list
       const nextList = (Object.keys(toJS(AppStore.lists))).slice(-1)[0];
       localStorage.setItem("currentListId", nextList);
-      AppStore.currentListId = nextList;
+      AppStore.localCurrentListId = nextList;
       AppStore.pieceFieldError = '';
     }
   }
