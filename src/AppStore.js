@@ -18,10 +18,8 @@ class AppStore {
   selectedOption;
   selectionDone;
   lists = {};
-  currentListId = (this.lists.hasOwnProperty(this.localCurrentListId) && this.localCurrentListId) || undefined;
   loggedIn = false;
   user = null;
-  openLogin = false;
   pieceEntry;
   
   
@@ -30,11 +28,19 @@ class AppStore {
       const currentListRef = this.currentListId && firebase.database().ref('users/' + userId + '/lists/' + this.currentListId + "/pieces");
       currentListRef.push(new Piece(piece))
   };
-
+  
+  get currentListId () {
+    if(this.localCurrentListId){
+      return this.lists.hasOwnProperty(this.localCurrentListId) && this.localCurrentListId;
+    }
+    else{
+      return Object.keys(toJS(this.lists)).slice(-1)[0];
+    }
+  }
 
   choose = p => {
     localStorage.setItem("currentListId", p);
-    this.currentListId = p;
+    this.localCurrentListId = p;
     this.pieceFieldError = '';
     this.listName =  this.lists[this.currentListId] && toJS(this.lists[this.currentListId].name);
   }
@@ -48,7 +54,7 @@ class AppStore {
     ).then((snap) => {
       const currentListId = snap.key;
       localStorage.setItem("currentListId", currentListId);
-      this.currentListId = currentListId; 
+      this.localCurrentListId = currentListId; 
       this.pieceFieldError = '';
       afterFunc();     
   })
@@ -99,9 +105,6 @@ get pieces() {
     this.piecesToSelectFrom = [];
   }
 
-//   get listName() {
-//     return this.lists && this.lists[AppStore.currentListId] && this.lists[this.currentListId].name;
-// }
 
 }
 decorate(AppStore, {
@@ -114,11 +117,10 @@ decorate(AppStore, {
   pieceFieldError: observable,
   piecesToSelectFrom: observable,
   selectionDone: observable,
-  currentListId: observable,
+  currentListId: computed,
   lists: observable,
   loggedIn: observable,
   user: observable,
-  openLogin: observable,
   createList: action,
   localCurrentListId: observable,
   pieceEntry: observable

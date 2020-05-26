@@ -2,12 +2,9 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-
-import { toJS } from "mobx";
 import firebase from "./firebase";
 import AppStore from "./AppStore";
 
-let currentListId;
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
@@ -22,7 +19,7 @@ firebase.auth().onAuthStateChanged(user => {
     };
     const userId = user.uid;
 
-    const listenToDatbase = (currentListId) => {
+    const listenToDatbase = () => {
       firebase
         .database()
         .ref("users/" + userId)
@@ -55,17 +52,7 @@ firebase.auth().onAuthStateChanged(user => {
             else {
               AppStore.lists = undefined;
             }
-            const localCurrentListId = localStorage.getItem("currentListId");
-
-            console.log("from index", toJS(AppStore.lists), localCurrentListId);
-
-            currentListId =
-              ( AppStore.lists &&
-                toJS(AppStore.lists).hasOwnProperty(localCurrentListId) &&
-                localCurrentListId) ||
-              undefined;
-            AppStore.currentListId = currentListId;
-            callback(currentListId);
+            callback();
           }
         })
     }
