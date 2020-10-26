@@ -11,6 +11,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from './components/Footer';
 import { useAppStore } from './useAppStore';
+import Header from './components/Header';
 
 
 const useStyles = makeStyles(theme => ({
@@ -19,18 +20,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     height: '100vh'
   },
-  toolbar: {
-    flexWrap: 'wrap',
-  },
-  toolbarTitle: {
-    flexGrow: 1,
-  },
   content: {
     flex: '1 0 auto',
   },
-  footer: {
-    flexShrink: 0,
-  }
 }));
 
 const App = observer(() => {
