@@ -2,12 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import PieceListContainer from './components/PieceListContainer';
 import NotLoggedInScreen from './components/NotLoggedInScreen';
-import SignOutButton from './components/SignOutButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
-import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from './components/Footer';
 import { useAppStore } from './useAppStore';
@@ -29,19 +25,10 @@ const App = observer(() => {
   const AppStore = useAppStore();
   const classes = useStyles();
   return (
-      <Box className={classes.root} >
+      <Box className={classes.root}>
         <CssBaseline />
         <Box className={classes.content}>
-          <AppBar position="static" color="default"  >
-            <Toolbar className={classes.toolbar}>
-              <Box className={classes.toolbarTitle}>
-                <Typography variant="h6" color="inherit" noWrap >
-                  AUDITIONIZER
-            </Typography>
-              </Box>
-              <SignOutButton />
-            </Toolbar>
-          </AppBar>
+          <Header />
           <Box>
             {AppStore.loggedIn ?
               <PieceListContainer /> :
@@ -49,7 +36,7 @@ const App = observer(() => {
             }
           </Box>
         </Box>
-        <footer className="classes.footer">
+        <footer>
           <Footer />
         </footer>
       </Box>
